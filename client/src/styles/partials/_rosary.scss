@@ -1,0 +1,244 @@
+.rosary {
+    display: flex;
+    @include flex-col;
+    &__main {
+        @include flex-row;
+        height: 29rem;
+        margin-top: 2.875rem;
+        border-top: 1px #cecece solid;
+        border-bottom: 1px #cecece solid;
+        &-left {
+            @include flex-col;
+            width: 12.5vw;
+            background-color: $rosary-background;
+        }
+        &-middle {
+            @include flex-col;
+            width: 80%;
+        }
+        &-right {
+            @include flex-col;
+            width: 12.5vw;
+            background-color: $rosary-background;
+        }
+    }
+}
+
+.audio {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: .5rem;
+    height: 50px;
+    width: 320px;
+    z-index: 10;
+    &__controls {
+        //position: absolute;
+        display: flex;
+        // justify-content: space-between;
+        justify-content: flex-start;
+        flex-direction: row;
+        width: 100%;
+        height: 40px;
+        bottom: 8px;
+        //background-color: $rosary-background;
+    }
+    &__play-container {
+        //background-color: rgba(50,50,50,0.7);
+        background-color: $rosary-background;
+        border-radius: 4px;
+        width: 60px;
+        height: 38px;
+        margin-left: 10px;
+    }
+    &__play-icon {
+        height: 24px;
+        width: 24px;
+        margin-top: 7px;
+        margin-left: 18px;
+    }
+    &__loader-container {
+        display: flex;
+        //background-color: rgba(50,50,50,0.7);
+        background-color: $rosary-background;
+        border-radius: 4px;
+        width: 40%;
+        height: 38px;
+        margin-left: 8px;
+        margin-right: 8px;
+    }
+    &__loader {
+        width: 100%;
+        height: 38px;
+    }
+    &__loader-time {
+        display: flex;
+        justify-content: flex-end;
+        color: $color-text-offset;
+        @include mobile-h4-list-contact;
+        width: 20%;
+        padding-top: 10px;
+        padding-right: 4px;
+    }
+    &__loader-lapsed, __loader-time-divider, __loader-duration {
+        color: $color-text-offset;
+        @include mobile-h4-list-contact;    
+    }
+    &__volume-container {
+        // background-color: rgba(50,50,50,0.7);
+        background-color: $rosary-background;
+        border-radius: 4px;
+        width: 85px;
+        height: 38px;
+        margin-right: 10px;
+    }
+    &__volume-icon {
+        height: 20px;
+        width: 20px;
+        margin-left: 12px;
+    }
+}
+
+.background {
+    position: relative;
+    @include flex-center;
+    height: 29rem;
+    width: 100%;
+    background-image: url('../../assets/images/marian-image-2.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    z-index: 1;
+    opacity: .3;
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        bottom: 0px;
+        left: 0px;
+        background-color: rgba(44, 90, 136, .3);
+    }
+}
+
+.pad {
+    height: .5rem;
+    width: 12.5vw;
+}
+
+.first-mystery {
+    @include flex-center;
+    height:36px;
+    &__bead {
+        @include large-bead;
+    }
+}
+
+.charity-first-mystery {
+    @include flex-center;
+    height:60px;
+    &__link {
+        @include large-link;
+    }
+}
+
+.charity {
+    @include flex-center;
+    height:30px;
+    &__bead {
+        @include regular-bead;
+    }
+}
+
+.hope-charity {
+    @include flex-center;
+    height:16px;
+    &__link {
+        @include regular-link;
+    }
+}
+
+.hope {
+    @include flex-center;
+    height:30px;
+    &__bead {
+        @include regular-bead;
+    }
+}
+
+.faith-hope {
+    @include flex-center;
+    height:16px;
+    &__link {
+        @include regular-link;
+    }
+}
+
+.faith {
+    @include flex-center;
+    height:30px;
+    &__bead {
+        @include regular-bead;
+    }
+}
+
+.our-father-faith {
+    @include flex-center;
+    height:60px;
+    &__link {
+        @include large-link;
+    }
+}
+
+.our-father {
+    @include flex-center;
+    height:36px;
+    &__bead {
+        @include large-bead;    }
+}
+
+.crucifix {
+    @include flex-center;
+    height: 8rem;
+    &__image {
+        position: relative;
+        text-align: center;
+        width: 2.5rem;
+        &::before,&::after {
+            position: absolute;
+            background-color: #7b7b7b;
+        // border: 3px solid black;
+        // box-shadow: 3px -3px 5px #999;
+            content: '';
+            height: 2.25rem;
+            width: 10px;
+            top: -10px;
+            left: 15px;
+            transform: rotate(90deg);
+        }
+        &::after {
+            width: 10px;
+            height: 4.5rem;
+            // box-shadow: 3px 3px 5px #999;
+            content: '';
+            transform: rotate(0deg);
+        }    
+    }
+}
+
+.decade-bead {
+    @include flex-center;
+    height:30px;
+    &__regular {
+        @include regular-bead;
+    }
+}
+
+.decade-link {
+    @include flex-center;
+    height:16px;
+    &__regular {
+        @include regular-link;
+    }
+}

@@ -1,0 +1,65 @@
+// Font Faces
+// Primary Font Faces (Inter)
+@font-face {
+    font-family: 'Inter';
+    src: url('../../assets/fonts/Inter-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Inter';
+    src: url('../../assets/fonts/Inter-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Lobster';
+    src: url('../../assets/fonts/Lobster-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+// Font Family
+$font-family: 'Inter', 'Lobster', sans-serif;
+
+// Global Font Variables
+// Base Font Size
+$base-font-size: 16px;
+// Desktop and Tablet
+$dt-h1-hero-header: 3.75 * $base-font-size;
+$dt-h1-hero-header-lh: 4.25 * $base-font-size;
+$dt-h1-header: 2.25 * $base-font-size;
+$dt-h1-header-lh: 2.75 * $base-font-size;
+$dt-h2-header: 1.5 * $base-font-size;
+$dt-h2-header-lh: 2 * $base-font-size;
+$dt-h3-Subheader: $base-font-size;
+$dt-h3-Subheader-lh: 1.5 * $base-font-size;
+$dt-h4-p-comments: .875 * $base-font-size;
+$dt-h4-p-comments-lh: 1.375 * $base-font-size;
+$dt-h4-list-contact: .875 * $base-font-size;
+$dt-h4-list-contact-lh: 1.25 * $base-font-size;
+$dt-h5-label: .75 * $base-font-size;
+$dt-h5-label-lh: 1.25 * $base-font-size;
+// Mobile
+$m-h1-header: 1.5 * $base-font-size;
+$m-h1-header-lh: 2 * $base-font-size;
+$m-h2-subheader: .875 * $base-font-size;
+$m-h2-subheader-lh: 1.375 * $base-font-size;
+$m-h4-p: .8125 * $base-font-size;
+$m-h4-p-lh: 1.125 * $base-font-size;
+$m-h4-list-contact: .8125 * $base-font-size;
+$m-h4-list-contact-lh: 1.125 * $base-font-size;
+$m-h5-label: .75 * $base-font-size;
+$m-h5-label-lh: 1.25 * $base-font-size;
+// Text Color
+$font-color: #323232;
+
+// Colors
+$color-paragraph-text: #D4E1D9;
+$color-divider: #E1E1E1;
+$color-nav-link-hero: rgb(143, 136, 149);
+$bead-background: #c6c6c6;
+$rosary-background: #2C5A88;
+$color-text-offset: #FFFFFF;

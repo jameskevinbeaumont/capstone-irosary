@@ -1,0 +1,14 @@
+@import './partials/mixins';
+@import './partials/typography';
+@import './partials/nav';
+@import './partials/rosary';
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: $font-family;
+}

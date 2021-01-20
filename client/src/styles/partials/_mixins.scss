@@ -1,0 +1,57 @@
+$bead-background: #c6c6c6;
+
+@mixin for-tablet-portrait-up {
+    @media (max-width: 768px) { @content; }
+}
+
+@mixin flex-center() {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@mixin flex-row() {
+    display: flex;
+    flex-direction: row;
+}
+
+@mixin flex-col() {
+    display: flex;
+    flex-direction: column;
+}
+
+@mixin large-bead() {
+    height: 36px;
+    width: 36px;
+    border: 2px solid black;
+    border-radius: 50%;
+    background: $bead-background;
+}
+
+@mixin large-link() {
+    height: 60px;
+    width: 10px;
+    background-color: black;
+    border-radius: 20%;
+}
+
+@mixin regular-bead() {
+    height: 30px;
+    width: 30px;
+    border: 2px solid black;
+    border-radius: 50%;
+    background: $bead-background;
+}
+
+@mixin regular-link() {
+    height: 16px;
+    width: 10px;
+    background-color: black;
+    border-radius: 20%;
+}
+
+@mixin mobile-h4-list-contact($font-weight:normal) {
+    font-size: $m-h4-list-contact;
+    line-height: $m-h4-list-contact-lh;
+    font-weight: $font-weight;
+}
