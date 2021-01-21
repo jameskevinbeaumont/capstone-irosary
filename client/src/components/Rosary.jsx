@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactPlayer from 'react-player';
 import Duration from './Duration';
-//import { audioSync } from 'audio-sync-with-text';
+import { audioSync } from 'audio-sync-with-text';
 import iconPlay from '../assets/icons/Icon-play.svg';
 import iconPause from '../assets/icons/Icon-pause.svg';
 import iconVolume from '../assets/icons/Icon-volume.svg';
@@ -29,14 +29,16 @@ class Rosary extends Component {
 
     componentDidMount() {
         this._isMounted = true;
+        console.log('componentDidMount');
         this.load('http://localhost:3000/assets/media/tue-fri-sorrowful.m4a');
         let asOptions = {
-            audioPlayer: 'react-player',
-            subtitleContainer: 'prayer-text',
-            subtitleFile: '../assets/media/tue-fri-sorrowful.vtt'
+            // audioPlayer: 'react-player',
+            audioPlayer: 'audio-player',
+            subtitlesContainer: 'prayer-text',
+            subtitlesFile: 'http://localhost:3000/assets/media/tue-fri-sorrowful.vtt'
         }
-        console.log(asOptions);
-        //audioSync(asOptions);
+        console.log('asOptions: ', asOptions);
+        audioSync(asOptions);
     };
 
     componentDidUpdate() {
@@ -87,6 +89,7 @@ class Rosary extends Component {
     };
 
     handleProgress = (state) => {
+        console.log('handleProgess: ', state);
         // We only want to update time slider if we are not currently seeking
         if (!this.state.seeking) {
             this.setState(state);
@@ -217,10 +220,11 @@ class Rosary extends Component {
                     </div>
                 </div>
                 <div className="audio">
+                    <audio controls src={url} id="audio-player"></audio>
                     {/* <ReactPlayer url="http://localhost:3000/assets/media/tue-fri-sorrowful.m4a" id="audio-player"
                         controls={true} width={310} height={50}
                         volume={.5} playbackRate={1} /> */}
-                    <ReactPlayer
+                    {/* <ReactPlayer
                         ref={this.ref}
                         className='react-player'
                         id='react-player'
@@ -237,7 +241,7 @@ class Rosary extends Component {
                         onError={e => console.log('onError', e)}
                         onProgress={this.handleProgress}
                         onDuration={this.handleDuration}
-                    />
+                    /> */}
                 </div>
                 <div className="audio__controls">
                     <div className="audio__play-container">
