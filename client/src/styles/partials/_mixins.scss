@@ -1,4 +1,3 @@
-$bead-background: #c6c6c6;
 
 @mixin for-tablet-portrait-up {
     @media (max-width: 768px) { @content; }
@@ -50,8 +49,32 @@ $bead-background: #c6c6c6;
     border-radius: 20%;
 }
 
+  // Font based Mixins
+@mixin mobile-h1($font-weight:bold) {
+    font-size: $m-h1-header;
+    line-height: $m-h1-header-lh;
+    font-weight: $font-weight;
+}
+
+@mixin mobile-h2($font-weight:bold) {
+    font-size: $m-h2-subheader;
+    line-height: $m-h2-subheader-lh;
+    font-weight: $font-weight;
+}
+
+@mixin mobile-p() {
+    font-size: $m-h4-p;
+    line-height: $m-h4-p-lh;
+}
+
 @mixin mobile-h4-list-contact($font-weight:normal) {
     font-size: $m-h4-list-contact;
     line-height: $m-h4-list-contact-lh;
     font-weight: $font-weight;
+}
+
+@mixin mobile-h5-label($color-text:$color-paragraph-text) {
+    font-size: $m-h5-label;
+    line-height: $m-h5-label-lh;
+    color: $color-text;
 }
