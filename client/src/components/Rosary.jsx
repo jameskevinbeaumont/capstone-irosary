@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import ReactPlayer from 'react-player';
-import Duration from './Duration';
+//import ReactPlayer from 'react-player';
+//import Duration from './Duration';
 import { audioSync } from 'audio-sync-with-text';
 import iconPlay from '../assets/icons/Icon-play.svg';
 import iconPause from '../assets/icons/Icon-pause.svg';
@@ -12,12 +12,15 @@ class Rosary extends Component {
 
     state = {
         url: null,
-        playing: true,
+        playing: false,
         volume: 0.8,
-        muted: false,
         played: 0,
         duration: 0,
-        playbackRate: 1.0
+        paused: 0,
+        seek: false,
+        playbackRate: 1.0,
+        playedDisp: '',
+        durationDisp: ''
     };
 
     load = url => {
@@ -48,68 +51,103 @@ class Rosary extends Component {
         this._isMounted = false;
     };
 
-    handlePlay = () => {
-        this.setState({ playing: true });
-    };
-
-    handlePause = () => {
-        this.setState({ playing: false });
-    };
-
     handlePlayPause = () => {
+        let audio = document.getElementById('audio-player');
+        let icon = document.getElementById('audio-play-icon');
+
         this.setState({ playing: !this.state.playing });
+
+        if (audio.paused || audio.ended) {
+            // let calcTime = this.state.duration * parseFloat(this.state.played);
+            // console.log('---------');
+            // console.log('playedDisp: ', this.state.playedDisp);
+            let newPlayed = this.state.playedDisp.split(":");
+            // console.log('newPlayed: ', newPlayed)
+            let newPlayedSecs = (Number(newPlayed[0]) * 60) + Number(newPlayed[1]);
+            // console.log('newPlayedSecs: ', newPlayedSecs);
+            //let calcTime = (this.state.played * 1000);
+            // console.log('currentTime: ', audio.currentTime);
+            // console.log('played: ', this.state.played);
+            // console.log('duration: ', this.state.duration);
+            // console.log('calcTime: ', calcTime);
+            //console.log('formatTime: ', formatTime(calcTime));
+            if (this.state.seek) {
+                audio.currentTime = newPlayedSecs;
+                // audio.currentTime = calcTime;
+                this.setState({ seek: false });
+            };
+            audio.play();
+            icon.src = iconPause;
+        } else {
+            audio.pause();
+            icon.src = iconPlay;
+            this.setState({ paused: audio.currentTime });
+        };
     };
 
     handleVolumeChange = (e) => {
+        let audio = document.getElementById('audio-player');
+        let icon = document.getElementById('audio-volume-icon');
         this.setState({ volume: parseFloat(e.target.value) });
-    };
-
-    handleToggleMuted = () => {
-        this.setState({ muted: !this.state.muted });
+        audio.volume = parseFloat(e.target.value);
+        if (audio.volume === 0) {
+            icon.src = iconVolumeMute;
+        } else {
+            icon.src = iconVolume;
+        };
     };
 
     handleSetPlaybackRate = (e) => {
         this.setState({ playbackRate: parseFloat(e.target.value) });
     };
 
-    handleSeekMouseDown = (e) => {
-        console.log('SeekMouseDown');
-        this.setState({ seeking: true });
-    };
-
     handleSeekChange = (e) => {
-        console.log('SeekChange: ', e.target.value);
+        // console.log('SeekChange(played): ', parseFloat(e.target.value));
         this.setState({ played: parseFloat(e.target.value) });
+        this.setState({ playedDisp: this.formatTime(parseFloat(e.target.value) * 1000) });
+        // this.setState({ playedDisp: this.formatTime(parseFloat(e.target.value) * this.state.duration) });
+        this.setState({ seek: true });
     };
 
-    handleSeekMouseUp = (e) => {
-        this.setState({ seeking: false });
-        console.log('SeekMouseUp: ', e.target.value)
-        this.player.seekTo(parseFloat(e.target.value));
+    handleProgress = (e) => {
+        // console.log('handleProgress => played: ', parseFloat(e.target.currentTime) / 1000);
+        this.setState({ played: (parseFloat(e.target.currentTime) / 1000) });
+        this.setState({ playedDisp: this.formatTime(parseFloat(((e.target.currentTime)))) });
     };
 
-    handleProgress = (state) => {
-        console.log('handleProgess: ', state);
-        // We only want to update time slider if we are not currently seeking
-        if (!this.state.seeking) {
-            this.setState(state);
-        };
+    handleDuration = (_e) => {
+        let audio = document.getElementById('audio-player');
+        // console.log('audio.duration: ', audio.duration);
+        this.setState({ duration: audio.duration });
+        this.setState({ durationDisp: this.formatTime(audio.duration) });
     };
 
     handleEnded = () => {
-        this.setState({ playing: this.state.loop });
+        let icon = document.getElementById('audio-play-icon');
+        document.getElementById('prayer-text').style.transition = "0.6s";
+        document.getElementById('prayer-text').innerText = "";
+
+        this.setState({ playing: false });
+        icon.src = iconPlay;
     };
 
-    handleDuration = (duration) => {
-        this.setState({ duration });
+    formatTime = (seconds) => {
+        const date = new Date(seconds * 1000);
+        const hh = date.getUTCHours();
+        const mm = date.getUTCMinutes();
+        const ss = this.pad(date.getUTCSeconds());
+        if (hh) {
+            return `${hh}:${this.pad(mm)}:${ss}`;
+        };
+        return `${mm}:${ss}`;
     };
 
-    ref = player => {
-        this.player = player;
+    pad = (string) => {
+        return ('0' + string).slice(-2);
     };
 
     render() {
-        const { url, playing, volume, muted, played, duration, playbackRate } = this.state
+        const { url, playing, volume, played, duration, paused, seek, playbackRate, playedDisp, durationDisp } = this.state
         return (
             <div className="rosary">
                 <div className="rosary__main">
@@ -153,7 +191,6 @@ class Rosary extends Component {
                                     SIGN OF THE CROSS
                                 </div>
                                 <div className="prayers__text" id="prayer-text">
-                                    {/* Hail Mary, full of Grace, the Lord is with thee; */}
                                 </div>
                             </div>
                         </section>
@@ -220,63 +257,46 @@ class Rosary extends Component {
                     </div>
                 </div>
                 <div className="audio">
-                    <audio controls src={url} id="audio-player"></audio>
-                    {/* <ReactPlayer url="http://localhost:3000/assets/media/tue-fri-sorrowful.m4a" id="audio-player"
-                        controls={true} width={310} height={50}
-                        volume={.5} playbackRate={1} /> */}
-                    {/* <ReactPlayer
-                        ref={this.ref}
-                        className='react-player'
-                        id='react-player'
-                        width={0} height={0}
-                        url={url}
-                        playing={playing}
-                        playbackRate={playbackRate}
-                        volume={volume}
-                        muted={muted}
-                        onPlay={this.handlePlay}
-                        onPause={this.handlePause}
-                        onSeek={e => console.log('onSeek', e)}
-                        onEnded={this.handleEnded}
-                        onError={e => console.log('onError', e)}
-                        onProgress={this.handleProgress}
-                        onDuration={this.handleDuration}
-                    /> */}
+                    <audio src={url} id="audio-player"
+                        onTimeUpdate={this.handleProgress}
+                        onCanPlayThrough={this.handleDuration}
+                        onEnded={this.handleEnded}>
+                    </audio>
                 </div>
                 <div className="audio__controls">
                     <div className="audio__play-container">
                         <img className="audio__play-icon"
                             onClick={this.handlePlayPause}
                             id="audio-play-icon"
-                            src={playing ? iconPause : iconPlay}
+                            // src={playing ? iconPause : iconPlay}
+                            src={iconPlay}
                             alt="play icon"
                         />
                     </div>
                     <div className="audio__loader-container">
                         <div className="audio__loader">
                             <input
-                                type='range' min={0} max={0.999999} step='any' className="audio__loader-slider"
+                                type='range'
+                                min={0}
+                                max={(duration / 1000) || 0}
+                                // max={0.999999} 
+                                step='any' className="audio__loader-slider"
                                 value={played}
-                                onMouseDown={this.handleSeekMouseDown}
                                 onChange={this.handleSeekChange}
-                                onMouseUp={this.handleSeekMouseUp}
                             />
-                            {/* <progress id="progress" value="0" max="100">
-                            </progress> */}
                         </div>
                         <div className="audio__loader-time">
-                            {/* <div className="audio__loader-lapsed" id="audio-loader-lapsed">{duration * played}</div> */}
-                            <Duration className="audio__loader-lapsed" seconds={duration * played} />
+                            {/* <Duration className="audio__loader-lapsed" seconds={duration * played} /> */}
+                            <div className="audio__loader-lapsed">{played === 0 ? '0:00' : playedDisp}</div>
                             <div className="audio__loader-time-divider">/</div>
-                            <Duration className="audio__loader-duration" seconds={duration} />
-                            {/* <div className="audio__loader-duration">{duration}</div> */}
+                            {/* <Duration className="audio__loader-duration" seconds={duration} /> */}
+                            <div className="audio__loader-duration">{durationDisp}</div>
                         </div>
                     </div>
                     <div className="audio__volume-container">
                         <img className="audio__volume-icon"
                             id="audio-volume-icon"
-                            onClick={this.handleToggleMuted}
-                            src={muted ? iconVolumeMute : iconVolume}
+                            src={iconVolume}
                             alt="volume icon"
                         />
                         <input type='range' className="audio__volume-slider" min={0} max={1} step='any' value={volume} onChange={this.handleVolumeChange} />

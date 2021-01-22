@@ -81,7 +81,7 @@ $contrast: 0%;
     &::-webkit-slider-thumb {
         @include thumb;
         -webkit-appearance: none;
-        margin-top: ((-$track-border-width * 2 + $track-height) / 2) - ($thumb-height / 2);
+        margin-top: ((-$track-border-width * 2 + $track-height) / 2) - ($thumb-height / 2.1);
     }
 
     &::-moz-range-track {
