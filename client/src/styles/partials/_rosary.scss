@@ -26,97 +26,6 @@
     }
 }
 
-.audio {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    //margin-top: .5rem;
-    //height: 50px;
-    width: 320px;
-    z-index: 10;
-    &__controls {
-        //position: absolute;
-        display: flex;
-        // justify-content: space-between;
-        justify-content: flex-start;
-        flex-direction: row;
-        width: 100%;
-        height: 40px;
-        bottom: 8px;
-        background-color: $rosary-background;
-    }
-    &__play-container {
-        //background-color: rgba(50,50,50,0.7);
-        background-color: $rosary-background;
-        border-radius: 4px;
-        width: 44px;
-        height: 38px;
-        margin-left: 10px;
-    }
-    &__play-icon {
-        height: 24px;
-        width: 24px;
-        margin-top: 7px;
-        margin-left: 12px;
-    }
-    &__loader-container {
-        display: flex;
-        //background-color: rgba(50,50,50,0.7);
-        background-color: $rosary-background;
-        border-radius: 4px;
-        width: 52%;
-        height: 38px;
-        //margin-left: 8px;
-        margin-right: 8px;
-    }
-    &__loader {
-        width: 60%;
-        height: 38px;
-        // #progress {
-        //     width: 100%;
-        // }
-    }
-    &__loader-slider {
-        width: 87%;
-        margin-top: 16px;
-        margin-left: 5px;
-    }
-    &__loader-time {
-        display: flex;
-        justify-content: flex-end;
-        color: $color-text-offset;
-        @include mobile-h4-list-contact;
-        width: 40%;
-        padding-top: 10px;
-        padding-right: 4px;
-        margin-left: 4px;
-    }
-    &__loader-lapsed, __loader-time-divider, __loader-duration {
-        color: $color-text-offset;
-        @include mobile-h4-list-contact;    
-    }
-    &__volume-container {
-        display: flex;
-        // background-color: rgba(50,50,50,0.7);
-        background-color: $rosary-background;
-        border-radius: 4px;
-        width: 80px;
-        height: 38px;
-        margin-right: 10px;
-    }
-    &__volume-icon {
-        height: 20px;
-        width: 20px;
-        margin-top: 7px;
-        margin-left: 12px;
-        margin-right: 8px;
-    }
-    &__volume-slider {
-        width: 30px;
-    }
-}
-
 input {
     background-color: $rosary-background;
 }
@@ -153,20 +62,25 @@ input {
     z-index: 1;
     &__title {
         position: absolute;
-        top: 0;
+        top: 0px;
+        // position: relative;
+        // top: -42px;
         width: 100%;
-        height: 35px;
+        height: 70px;
         text-align: center;
-        padding-top: .5rem;
-        @include mobile-h1;
+        // padding-top: .5rem;
+        // @include mobile-h1;
+        // @include tablap-h1;
+        @include tablap-h2;
         font-weight: 900;
         color: #FBE800;
     }
     &__text {
-        position: absolute;
+        position: relative;
+        top: 74px;
         text-align: center;
         height: 300px;
-        width: 240px;
+        width: 100%; //240px;
         @include mobile-h1;
         font-weight: 900;
         color: white;
@@ -184,6 +98,9 @@ input {
     &__bead {
         @include large-bead;
     }
+    &__bead--highlight {
+        @include large-bead-highlight;
+    }
 }
 
 .charity-first-mystery {
@@ -199,6 +116,9 @@ input {
     height:30px;
     &__bead {
         @include regular-bead;
+    }
+    &__bead--highlight {
+        @include regular-bead-highlight;
     }
 }
 
@@ -216,6 +136,9 @@ input {
     &__bead {
         @include regular-bead;
     }
+    &__bead--highlight {
+        @include regular-bead-highlight;
+    }
 }
 
 .faith-hope {
@@ -232,6 +155,9 @@ input {
     &__bead {
         @include regular-bead;
     }
+    &__bead--highlight {
+        @include regular-bead-highlight;
+    }
 }
 
 .our-father-faith {
@@ -246,7 +172,11 @@ input {
     @include flex-center;
     height:36px;
     &__bead {
-        @include large-bead;    }
+        @include large-bead;    
+    }
+    &__bead--highlight {
+        @include large-bead-highlight;
+    }
 }
 
 .crucifix {
@@ -259,10 +189,10 @@ input {
         &::before,&::after {
             position: absolute;
             background-color: #7b7b7b;
-        // border: 3px solid black;
-        // box-shadow: 3px -3px 5px #999;
+            //border: 3px solid black;
+            //box-shadow: 3px -3px 5px #999;
             content: '';
-            height: 2.25rem;
+            height: 2.30rem;
             width: 10px;
             top: -10px;
             left: 15px;
@@ -271,7 +201,7 @@ input {
         &::after {
             width: 10px;
             height: 4.5rem;
-            // box-shadow: 3px 3px 5px #999;
+            //box-shadow: 3px 3px 5px #999;
             content: '';
             transform: rotate(0deg);
         }    
@@ -284,6 +214,9 @@ input {
     &__regular {
         @include regular-bead;
     }
+    &__bead--highlight {
+        @include regular-bead-highlight;
+    }
 }
 
 .decade-link {
@@ -291,5 +224,93 @@ input {
     height:16px;
     &__regular {
         @include regular-link;
+    }
+}
+
+.audio {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    z-index: 10;
+    &__controls {
+        display: flex;
+        justify-content: flex-start;
+        flex-direction: row;
+        width: 100%;
+        height: 60px;
+        bottom: 8px;
+        background-color: $rosary-background;
+    }
+    &__play-container {
+        //background-color: rgba(50,50,50,0.7);
+        background-color: $rosary-background;
+        border-radius: 4px;
+        width: 44px;
+        height: 42px;
+        margin-top: 9px;
+        margin-left: 6px;
+    }
+    &__play-icon {
+        height: 28px;
+        width: 28px;
+        margin-top: 7px;
+        margin-left: 12px;
+    }
+    &__loader-container {
+        display: flex;
+        //background-color: rgba(50,50,50,0.7);
+        background-color: $rosary-background;
+        border-radius: 4px;
+        width: 52%;
+        height: 38px;
+        //margin-left: 8px;
+        margin-right: 8px;
+    }
+    &__loader {
+        margin-top: 9px;
+        width: 60%;
+        height: 38px;
+    }
+    &__loader-slider {
+        width: 87%;
+        height: 10px;
+        margin-top: 16px;
+        margin-left: 5px;
+    }
+    &__loader-time {
+        display: flex;
+        justify-content: flex-end;
+        color: $color-text-offset;
+        @include mobile-h4-list-contact;
+        width: 40%;
+        padding-top: 21px;
+        padding-right: 4px;
+        margin-left: 4px;
+    }
+    &__loader-lapsed, __loader-time-divider, __loader-duration {
+        color: $color-text-offset;
+        @include mobile-h4-list-contact;    
+    }
+    &__volume-container {
+        display: flex;
+        //background-color: rgba(50,50,50,0.7);
+        background-color: $rosary-background;
+        border-radius: 4px;
+        width: 90px;
+        height: 42px;
+        margin-top: 9px;
+        margin-right: 6px;
+    }
+    &__volume-icon {
+        height: 28px;
+        width: 28px;
+        margin-top: 7px;
+        margin-left: 6px;
+        margin-right: 8px;
+    }
+    &__volume-slider {
+        width: 42px;
     }
 }

@@ -1,11 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="17px" height="16px" viewBox="0 0 17 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 52.5 (67469) - http://www.bohemiancoding.com/sketch -->
-    <title>Icon-volume</title>
-    <desc>Created with Sketch.</desc>
-    <g id="BrainFlix" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Icon-volume" fill="#FFFFFF" fill-rule="nonzero">
-            <path d="M12.3314286,8 C12.3314286,6.51428571 11.5085714,5.23428571 10.2857143,4.57142857 L10.2857143,11.4285714 C11.4971429,10.7657143 12.3314286,9.48571429 12.3314286,8 Z M0,5.71428571 L0,10.2857143 L3.42857143,10.2857143 L8,14.8571429 L8,1.14285714 L3.42857143,5.71428571 L0,5.71428571 Z M10.2857143,0 L10.2857143,1.71428571 C12.9371429,2.56 14.8571429,5.06285714 14.8571429,8 C14.8571429,10.9371429 12.9371429,13.44 10.2857143,14.2857143 L10.2857143,16 C13.8857143,15.1085714 16.5714286,11.8857143 16.5714286,8 C16.5714286,4.11428571 13.8857143,0.891428571 10.2857143,0 Z" id="Shape"></path>
-        </g>
-    </g>
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg" class="ionicon">
+ <title>Volume High</title>
+
+ <g>
+  <title>background</title>
+  <rect fill="none" id="canvas_background" height="402" width="582" y="-1" x="-1"/>
+ </g>
+ <g>
+  <title>Layer 1</title>
+  <path id="svg_1" stroke-width="32" stroke-miterlimit="10" stroke-linecap="square" stroke="#ffffff" fill="#ffffff" d="m320,320c9.74,-19.38 16,-40.84 16,-64c0,-23.48 -6,-44.42 -16,-64m48,176c19.48,-33.92 32,-64.06 32,-112s-12,-77.74 -32,-112m48,272c30,-46 48,-91.43 48,-160s-18,-113 -48,-160"/>
+  <path fill="#ffffff" id="svg_2" d="m125.65,176.1l-93.65,0l0,159.8l93.65,0l130.35,104.1l0,-368l-130.35,104.1z"/>
+ </g>
 </svg>

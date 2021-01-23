@@ -20,11 +20,17 @@
 }
 
 @mixin large-bead() {
+    background: black;
+    border-radius: 50%;
     height: 36px;
     width: 36px;
-    border: 2px solid black;
-    border-radius: 50%;
-    background: $bead-background;
+    margin: 0;
+    background: radial-gradient(circle at 12px 12px, $bead-background, #000);
+}
+
+@mixin large-bead-highlight() {
+    @include large-bead();
+    background: radial-gradient(circle at 12px 12px, $bead-highlight, #000);
 }
 
 @mixin large-link() {
@@ -35,11 +41,17 @@
 }
 
 @mixin regular-bead() {
+    background: black;
+    border-radius: 50%;
     height: 30px;
     width: 30px;
-    border: 2px solid black;
-    border-radius: 50%;
-    background: $bead-background;
+    margin: 0;
+    background: radial-gradient(circle at 10px 10px, $bead-background, #000);
+}
+
+@mixin regular-bead-highlight() {
+    @include regular-bead();
+    background: radial-gradient(circle at 10px 10px, $bead-highlight, #000);
 }
 
 @mixin regular-link() {
@@ -77,4 +89,36 @@
     font-size: $m-h5-label;
     line-height: $m-h5-label-lh;
     color: $color-text;
+}
+
+@mixin tablap-h1-hero () {
+    font-size: $dt-h1-hero-header;
+    line-height: $dt-h1-hero-header-lh;
+}
+
+@mixin tablap-h1() {
+    font-size: $dt-h1-header;
+    line-height: $dt-h1-header-lh;
+}
+
+@mixin tablap-h2($font-weight:500) {
+    font-size: $dt-h2-header;
+    line-height: $dt-h2-header-lh;
+    font-weight: $font-weight;
+}
+
+@mixin tablap-h3($font-weight:500) {
+    font-size: $dt-h3-Subheader;
+    line-height: $dt-h3-Subheader-lh;
+    font-weight: $font-weight;
+}
+
+@mixin tablap-p-comments() {
+    font-size: $dt-h4-p-comments;
+    line-height: $dt-h4-p-comments-lh;
+}
+
+@mixin tablap-h5-label() {
+    font-size: $dt-h5-label;
+    line-height: $dt-h5-label-lh;
 }

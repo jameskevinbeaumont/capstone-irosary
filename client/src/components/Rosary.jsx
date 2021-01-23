@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-//import ReactPlayer from 'react-player';
-//import Duration from './Duration';
 import { audioSync } from 'audio-sync-with-text';
 import iconPlay from '../assets/icons/Icon-play.svg';
 import iconPause from '../assets/icons/Icon-pause.svg';
 import iconVolume from '../assets/icons/Icon-volume.svg';
-import iconVolumeMute from '../assets/icons/Icon-volume-mute.png';
+import iconVolumeMute from '../assets/icons/Icon-volume-mute.svg';
 
 class Rosary extends Component {
     _isMounted = false;
@@ -23,24 +21,16 @@ class Rosary extends Component {
         durationDisp: ''
     };
 
-    load = url => {
-        this.setState({
-            url,
-            played: 0,
-        });
-    };
-
     componentDidMount() {
         this._isMounted = true;
-        console.log('componentDidMount');
+
         this.load('http://localhost:3000/assets/media/tue-fri-sorrowful.m4a');
         let asOptions = {
-            // audioPlayer: 'react-player',
             audioPlayer: 'audio-player',
             subtitlesContainer: 'prayer-text',
             subtitlesFile: 'http://localhost:3000/assets/media/tue-fri-sorrowful.vtt'
-        }
-        console.log('asOptions: ', asOptions);
+        };
+
         audioSync(asOptions);
     };
 
@@ -51,6 +41,13 @@ class Rosary extends Component {
         this._isMounted = false;
     };
 
+    load = url => {
+        this.setState({
+            url,
+            played: 0,
+        });
+    };
+
     handlePlayPause = () => {
         let audio = document.getElementById('audio-player');
         let icon = document.getElementById('audio-play-icon');
@@ -58,22 +55,13 @@ class Rosary extends Component {
         this.setState({ playing: !this.state.playing });
 
         if (audio.paused || audio.ended) {
-            // let calcTime = this.state.duration * parseFloat(this.state.played);
-            // console.log('---------');
-            // console.log('playedDisp: ', this.state.playedDisp);
             let newPlayed = this.state.playedDisp.split(":");
-            // console.log('newPlayed: ', newPlayed)
             let newPlayedSecs = (Number(newPlayed[0]) * 60) + Number(newPlayed[1]);
-            // console.log('newPlayedSecs: ', newPlayedSecs);
-            //let calcTime = (this.state.played * 1000);
-            // console.log('currentTime: ', audio.currentTime);
-            // console.log('played: ', this.state.played);
-            // console.log('duration: ', this.state.duration);
-            // console.log('calcTime: ', calcTime);
-            //console.log('formatTime: ', formatTime(calcTime));
+            if (newPlayedSecs === 0) {
+                document.getElementById('prayer-text').innerText = "";
+            };
             if (this.state.seek) {
                 audio.currentTime = newPlayedSecs;
-                // audio.currentTime = calcTime;
                 this.setState({ seek: false });
             };
             audio.play();
@@ -102,29 +90,24 @@ class Rosary extends Component {
     };
 
     handleSeekChange = (e) => {
-        // console.log('SeekChange(played): ', parseFloat(e.target.value));
         this.setState({ played: parseFloat(e.target.value) });
         this.setState({ playedDisp: this.formatTime(parseFloat(e.target.value) * 1000) });
-        // this.setState({ playedDisp: this.formatTime(parseFloat(e.target.value) * this.state.duration) });
         this.setState({ seek: true });
     };
 
     handleProgress = (e) => {
-        // console.log('handleProgress => played: ', parseFloat(e.target.currentTime) / 1000);
         this.setState({ played: (parseFloat(e.target.currentTime) / 1000) });
         this.setState({ playedDisp: this.formatTime(parseFloat(((e.target.currentTime)))) });
     };
 
     handleDuration = (_e) => {
         let audio = document.getElementById('audio-player');
-        // console.log('audio.duration: ', audio.duration);
         this.setState({ duration: audio.duration });
         this.setState({ durationDisp: this.formatTime(audio.duration) });
     };
 
     handleEnded = () => {
         let icon = document.getElementById('audio-play-icon');
-        document.getElementById('prayer-text').style.transition = "0.6s";
         document.getElementById('prayer-text').innerText = "";
 
         this.setState({ playing: false });
@@ -198,61 +181,61 @@ class Rosary extends Component {
                     <div className="rosary__main-right">
                         <div className="pad"></div>
                         <div className="decade-bead">
-                            <div className="decade-bead__regular" id="10"></div>
+                            <div className="decade-bead__regular" id="decade-bead-10"></div>
                         </div>
                         <div className="decade-link">
-                            <div className="decade-link__regular" id="9"></div>
+                            <div className="decade-link__regular" id="decade-link-9"></div>
                         </div>
                         <div className="decade-bead">
-                            <div className="decade-bead__regular" id="9"></div>
+                            <div className="decade-bead__regular" id="decade-bead-9"></div>
                         </div>
                         <div className="decade-link">
-                            <div className="decade-link__regular" id="8"></div>
+                            <div className="decade-link__regular" id="decade-link-8"></div>
                         </div>
                         <div className="decade-bead">
-                            <div className="decade-bead__regular" id="8"></div>
+                            <div className="decade-bead__regular" id="decade-bead-8"></div>
                         </div>
                         <div className="decade-link">
-                            <div className="decade-link__regular" id="7"></div>
+                            <div className="decade-link__regular" id="decade-link-7"></div>
                         </div>
                         <div className="decade-bead">
-                            <div className="decade-bead__regular" id="7"></div>
+                            <div className="decade-bead__regular" id="decade-bead-7"></div>
                         </div>
                         <div className="decade-link">
-                            <div className="decade-link__regular" id="6"></div>
+                            <div className="decade-link__regular" id="decade-link-6"></div>
                         </div>
                         <div className="decade-bead">
-                            <div className="decade-bead__regular" id="6"></div>
+                            <div className="decade-bead__regular" id="decade-bead-6"></div>
                         </div>
                         <div className="decade-link">
-                            <div className="decade-link__regular" id="5"></div>
+                            <div className="decade-link__regular" id="decade-link-5"></div>
                         </div>
                         <div className="decade-bead">
-                            <div className="decade-bead__regular" id="5"></div>
+                            <div className="decade-bead__regular" id="decade-bead-5"></div>
                         </div>
                         <div className="decade-link">
-                            <div className="decade-link__regular" id="4"></div>
+                            <div className="decade-link__regular" id="decade-link-4"></div>
                         </div>
                         <div className="decade-bead">
-                            <div className="decade-bead__regular" id="4"></div>
+                            <div className="decade-bead__regular" id="decade-bead-4"></div>
                         </div>
                         <div className="decade-link">
-                            <div className="decade-link__regular" id="3"></div>
+                            <div className="decade-link__regular" id="decade-link-3"></div>
                         </div>
                         <div className="decade-bead">
-                            <div className="decade-bead__regular" id="3"></div>
+                            <div className="decade-bead__regular" id="decade-bead-3"></div>
                         </div>
                         <div className="decade-link">
-                            <div className="decade-link__regular" id="2"></div>
+                            <div className="decade-link__regular" id="decade-link-2"></div>
                         </div>
                         <div className="decade-bead">
-                            <div className="decade-bead__regular" id="2"></div>
+                            <div className="decade-bead__regular" id="decade-bead-2"></div>
                         </div>
                         <div className="decade-link">
-                            <div className="decade-link__regular" id="1"></div>
+                            <div className="decade-link__regular" id="decade-link-1"></div>
                         </div>
                         <div className="decade-bead">
-                            <div className="decade-bead__regular" id="1"></div>
+                            <div className="decade-bead__regular" id="decade-bead-1"></div>
                         </div>
                     </div>
                 </div>
@@ -268,7 +251,6 @@ class Rosary extends Component {
                         <img className="audio__play-icon"
                             onClick={this.handlePlayPause}
                             id="audio-play-icon"
-                            // src={playing ? iconPause : iconPlay}
                             src={iconPlay}
                             alt="play icon"
                         />
@@ -279,17 +261,14 @@ class Rosary extends Component {
                                 type='range'
                                 min={0}
                                 max={(duration / 1000) || 0}
-                                // max={0.999999} 
                                 step='any' className="audio__loader-slider"
                                 value={played}
                                 onChange={this.handleSeekChange}
                             />
                         </div>
                         <div className="audio__loader-time">
-                            {/* <Duration className="audio__loader-lapsed" seconds={duration * played} /> */}
                             <div className="audio__loader-lapsed">{played === 0 ? '0:00' : playedDisp}</div>
                             <div className="audio__loader-time-divider">/</div>
-                            {/* <Duration className="audio__loader-duration" seconds={duration} /> */}
                             <div className="audio__loader-duration">{durationDisp}</div>
                         </div>
                     </div>

@@ -3,8 +3,9 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 // Import Styles
 import './styles/App.scss';
 // Import Components
-import Nav from './components/Nav';
-import Rosary from './components/Rosary';
+import { Nav, Rosary } from './components';
+// import Nav from './components/Nav';
+// import Rosary from './components/Rosary';
 
 function App() {
   return (

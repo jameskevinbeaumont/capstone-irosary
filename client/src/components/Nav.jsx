@@ -6,14 +6,10 @@ function Nav() {
     const navClick = () => {
         const burger = document.querySelector('.nav__burger');
         const nav = document.querySelector('.nav__links');
-        // console.log(window.getComputedStyle(burger).display);
-        // console.log(nav.classList.contains('nav-active'));
         // If link clicked and burger not being displayed, exit the function
         if (window.getComputedStyle(burger).display === "none") return;
         // Toggle Nav
         nav.classList.toggle('nav-active');
-        // Burger Animation
-        // burger.classList.toggle('toggle');
     };
 
     return (
