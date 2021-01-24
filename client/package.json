@@ -25,7 +25,13 @@
     "extends": [
       "react-app",
       "react-app/jest"
-    ]
+    ],
+    "rules": {
+      "no-restricted-syntax": [
+        "error",
+        "SequenceExpression"
+      ]
+    }
   },
   "browserslist": {
     "production": [
@@ -38,5 +44,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "proxy": "http://localhost:3000"
 }

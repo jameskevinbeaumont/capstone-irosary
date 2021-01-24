@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { audioSync } from 'audio-sync-with-text';
+//import { audioSync } from 'audio-sync-with-text';
+import { audioVTT } from './audiovtt';
 import iconPlay from '../assets/icons/Icon-play.svg';
 import iconPause from '../assets/icons/Icon-pause.svg';
 import iconVolume from '../assets/icons/Icon-volume.svg';
@@ -28,10 +29,17 @@ class Rosary extends Component {
         let asOptions = {
             audioPlayer: 'audio-player',
             subtitlesContainer: 'prayer-text',
+            prayerTitle: 'prayers-title',
+            prayerSubtitle1: 'prayers-subtitle-1',
+            prayerSubtitle2_1: 'prayers-subtitle-2-1',
+            prayerSubtitle2_2: 'prayers-subtitle-2-2',
+            prayerSubtitleMystery1: 'prayers-subtitle-mystery-1',
+            prayerSubtitleMystery2: 'prayers-subtitle-mystery-2',
             subtitlesFile: 'http://localhost:3000/assets/media/tue-fri-sorrowful.vtt'
         };
 
-        audioSync(asOptions);
+        //audioSync(asOptions);
+        audioVTT(asOptions);
     };
 
     componentDidUpdate() {
@@ -58,7 +66,7 @@ class Rosary extends Component {
             let newPlayed = this.state.playedDisp.split(":");
             let newPlayedSecs = (Number(newPlayed[0]) * 60) + Number(newPlayed[1]);
             if (newPlayedSecs === 0) {
-                document.getElementById('prayer-text').innerText = "";
+                this.resetPrayers();
             };
             if (this.state.seek) {
                 audio.currentTime = newPlayedSecs;
@@ -108,10 +116,20 @@ class Rosary extends Component {
 
     handleEnded = () => {
         let icon = document.getElementById('audio-play-icon');
-        document.getElementById('prayer-text').innerText = "";
+        this.resetPrayers();
 
         this.setState({ playing: false });
         icon.src = iconPlay;
+    };
+
+    resetPrayers = () => {
+        document.getElementById('prayer-text').innerText = "";
+        document.getElementById('prayers-title').innerText = "";
+        document.getElementById('prayers-subtitle-1').innerText = "";
+        document.getElementById('prayers-subtitle-2-1').innerText = "";
+        document.getElementById('prayers-subtitle-2-2').innerText = "";
+        document.getElementById('prayers-subtitle-mystery-1').innerText = "";
+        document.getElementById('prayers-subtitle-mystery-2').innerText = "";
     };
 
     formatTime = (seconds) => {
@@ -130,7 +148,7 @@ class Rosary extends Component {
     };
 
     render() {
-        const { url, playing, volume, played, duration, paused, seek, playbackRate, playedDisp, durationDisp } = this.state
+        const { url, volume, played, duration, playedDisp, durationDisp } = this.state
         return (
             <div className="rosary">
                 <div className="rosary__main">
@@ -170,8 +188,33 @@ class Rosary extends Component {
                     <div className="rosary__main-middle">
                         <section className="background">
                             <div className="prayers">
-                                <div className="prayers__title">
-                                    SIGN OF THE CROSS
+                                <div
+                                    className="prayers__title"
+                                    id="prayers-title">
+                                </div>
+                                <div className="prayers__subtitle">
+                                    <div
+                                        className="prayers__subtitle-1"
+                                        id="prayers-subtitle-1"
+                                    ></div>
+                                    <div className="prayers__subtitle-2">
+                                        <div
+                                            className="prayers__subtitle-2-1"
+                                            id="prayers-subtitle-2-1"
+                                        ></div>
+                                        <div
+                                            className="prayers__subtitle-2-2"
+                                            id="prayers-subtitle-2-2"
+                                        ></div>
+                                    </div>
+                                </div>
+                                <div className="prayers__subtitle-mystery">
+                                    <div
+                                        className="prayers__subtitle-mystery-1"
+                                        id="prayers-subtitle-mystery-1"></div>
+                                    <div
+                                        className="prayers__subtitle-mystery-2"
+                                        id="prayers-subtitle-mystery-2"></div>
                                 </div>
                                 <div className="prayers__text" id="prayer-text">
                                 </div>

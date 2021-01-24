@@ -15,11 +15,13 @@ require('./config/passport')(passport);
 connectDB();
 
 const userRoute = require('./routes/user');
+const vttRoute = require('./routes/vtt');
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use('/user', userRoute);
+app.use('/vtt', vttRoute);
 
 // Logging
 if (process.env.NODE_ENV === 'development') {

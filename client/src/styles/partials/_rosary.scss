@@ -63,27 +63,85 @@ input {
     &__title {
         position: absolute;
         top: 0px;
-        // position: relative;
-        // top: -42px;
         width: 100%;
         height: 70px;
         text-align: center;
-        // padding-top: .5rem;
-        // @include mobile-h1;
-        // @include tablap-h1;
         @include tablap-h2;
         font-weight: 900;
         color: #FBE800;
+        border: 1px solid black;
+    }
+    &__subtitle {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        height: 46px;
+        top: 16px;
+        font-weight: 900;
+        color: #FBE800;
+        border: 1px solid black;
+        &-1 {
+            width: 15%;
+            @include tablap-h1;
+            border: 1px solid black;
+        }
+        &-2 {
+            display: flex;
+            flex-direction: column;
+            height: 70px;
+            width: 85%;
+            @include mobile-h2;        
+            color: #FFFFFF;
+            border: 1px solid black;
+            &-1 {
+                width: 100%;
+                border: 1px solid black;
+            }
+            &-2 {
+                width: 100%;
+                color: #FBE800;
+                border: 1px solid black;
+            }
+        }
+    }
+    &__subtitle-mystery {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        height: 32px;
+        top: 42px;
+        font-weight: 900;
+        color: #FBE800;
+        border: 1px solid black;
+        &-1 {
+            width: 10%;
+            @include tablap-h1;
+            justify-content: center;
+            align-self: center;
+            color: #FFFFFF;
+            border: 1px solid black;
+        }
+        &-2 {
+            width: 90%;
+            @include mobile-h2;
+            justify-content: center;
+            align-self: center;
+            text-align: center;
+            border: 1px solid black;
+        }
     }
     &__text {
         position: relative;
-        top: 74px;
+        top: 46px;
         text-align: center;
-        height: 300px;
+        height: 280px;
         width: 100%; //240px;
         @include mobile-h1;
         font-weight: 900;
         color: white;
+        border: 1px solid black;
     }
 }
 
