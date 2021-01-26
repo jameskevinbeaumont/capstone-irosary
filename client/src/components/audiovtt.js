@@ -59,13 +59,13 @@ export function audioVTT(options) {
             case 13:
                 prayerTitle.innerText = "GLORY BE";
                 break;
-            case 14:
+            case 14: case 15: case 16:
                 prayerTitle.innerText = "SORROWFUL MYSTERIES";
                 prayerSubtitle1.innerText = "1";
                 prayerSubtitle2_1.innerText = "The Agony in the Garden"
                 prayerSubtitle2_2.innerText = "Fruit: Conformity to the will of God"
                 break;
-            case 15: case 16: case 39: case 40:
+            case 40: case 41:
                 prayerSubtitleMystery1.innerText = '';
                 prayerSubtitleMystery2.innerText = 'OUR FATHER';
                 break;
@@ -75,6 +75,14 @@ export function audioVTT(options) {
                 break;
             case 19: case 20:
                 prayerSubtitleMystery1.innerText = '2';
+                prayerSubtitleMystery2.innerText = 'HAIL MARY';
+                break;
+            case 21: case 22:
+                prayerSubtitleMystery1.innerText = '3';
+                prayerSubtitleMystery2.innerText = 'HAIL MARY';
+                break;
+            case 23: case 24:
+                prayerSubtitleMystery1.innerText = '4';
                 prayerSubtitleMystery2.innerText = 'HAIL MARY';
                 break;
             case 37:

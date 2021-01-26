@@ -2,7 +2,7 @@ const userData = require('../seed_data/user');
 
 exports.seed = knex => {
     return knex('users')
-        .del()
+        .truncate()
         .then(() => {
             return knex('users').insert(userData)
         });

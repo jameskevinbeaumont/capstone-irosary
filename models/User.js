@@ -2,7 +2,8 @@
 const bookshelf = require('../bookshelf');
 
 const User = bookshelf.model("User", {
-    tableName: "users"
+    tableName: "users",
+    hasTimestamps: true
 });
 
 // const UserSchema = new mongoose.Schema({

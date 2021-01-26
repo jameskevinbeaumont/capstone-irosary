@@ -150,7 +150,7 @@ input {
     width: 12.5vw;
 }
 
-.first-mystery {
+.mystery {
     @include flex-center;
     height:36px;
     &__bead {
@@ -161,7 +161,7 @@ input {
     }
 }
 
-.charity-first-mystery {
+.charity-mystery {
     @include flex-center;
     height:60px;
     &__link {
@@ -218,7 +218,7 @@ input {
     }
 }
 
-.our-father-faith {
+.of-fatima-hhq-faith {
     @include flex-center;
     height:60px;
     &__link {
@@ -226,7 +226,7 @@ input {
     }
 }
 
-.our-father {
+.of-fatima-hhq {
     @include flex-center;
     height:36px;
     &__bead {

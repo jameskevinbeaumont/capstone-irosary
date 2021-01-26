@@ -154,32 +154,41 @@ class Rosary extends Component {
                 <div className="rosary__main">
                     <div className="rosary__main-left">
                         <div className="pad"></div>
-                        <div className="first-mystery">
-                            <div className="first-mystery__bead"></div>
+                        <div className="mystery">
+                            <div className="mystery__bead"
+                                id="mystery-bead"></div>
                         </div>
-                        <div className="charity-first-mystery">
-                            <div className="charity-first-mystery__link"></div>
+                        <div className="charity-mystery">
+                            <div className="charity-mystery__link"></div>
                         </div>
                         <div className="charity">
-                            <div className="charity__bead"></div>
+                            <div
+                                className="charity__bead"
+                                id="charity-bead"></div>
                         </div>
                         <div className="hope-charity">
                             <div className="hope-charity__link"></div>
                         </div>
                         <div className="hope">
-                            <div className="hope__bead"></div>
+                            <div
+                                className="hope__bead"
+                                id="hope-bead"></div>
                         </div>
                         <div className="faith-hope">
                             <div className="faith-hope__link"></div>
                         </div>
                         <div className="faith">
-                            <div className="faith__bead"></div>
+                            <div
+                                className="faith__bead"
+                                id="faith-bead"></div>
                         </div>
-                        <div className="our-father-faith">
-                            <div className="our-father-faith__link"></div>
+                        <div className="of-fatima-hhq-faith">
+                            <div className="of-fatima-hhq-faith__link"></div>
                         </div>
-                        <div className="our-father">
-                            <div className="our-father__bead"></div>
+                        <div className="of-fatima-hhq">
+                            <div
+                                className="of-fatima-hhq__bead"
+                                id="of-fatima-hhq-bead"></div>
                         </div>
                         <div className="crucifix">
                             <div className="crucifix__image"></div>

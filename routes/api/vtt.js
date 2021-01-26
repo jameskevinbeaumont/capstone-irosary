@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const db = require('../../database');
 const fs = require('fs');
-const convertVttToJson = require('../vttjson');
+const convertVttToJson = require('./vttjson');
 
 router.route('/:filename')
     // POST route to create JSON file from VTT file

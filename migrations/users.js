@@ -7,7 +7,7 @@ exports.up = (knex) => {
         table.string("firstName").notNullable();
         table.string("lastName").notNullable();
         table.string("image");
-        table.timestamp("updated_at").defaultTo(knex.fn.now());
+        table.timestamps();
     });
 };
 

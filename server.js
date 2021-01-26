@@ -3,7 +3,8 @@ const dotenv = require('dotenv');
 const morgan = require('morgan');
 const passport = require('passport');
 const session = require('express-session');
-const connectDB = require('./config/db');
+const bodyParser = require('body-parser');
+//const connectDB = require('./config/db');
 
 // Load Config
 dotenv.config({ path: './config/config.env' });
@@ -12,16 +13,19 @@ dotenv.config({ path: './config/config.env' });
 require('./config/passport')(passport);
 
 // Connect to DB (mongoDB)
-connectDB();
+//connectDB();
 
 const userRoute = require('./routes/user');
-const vttRoute = require('./routes/vtt');
+const apiRoute = require('./routes/api');
+//const vttRoute = require('./routes/vtt');
 const app = express();
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use('/api', apiRoute);
 app.use('/user', userRoute);
-app.use('/vtt', vttRoute);
 
 // Logging
 if (process.env.NODE_ENV === 'development') {
