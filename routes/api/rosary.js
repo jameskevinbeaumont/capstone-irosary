@@ -17,25 +17,48 @@ router.route('/:mystery')
             .where('r.mystery_code', '=', req.params.mystery)
             .orderBy('r.index')
             .then((data) => {
-                res.send(data)
+                if (data.length !== 0) {
+                    res.status(200).send(data)
+                } else {
+                    res.status(500).send(`Transcript data not found base on mystery provided (${req.params.mystery}).`)
+                }
             })
+            .catch((err => {
+                if (typeof err.code === 'undefined') {
+                    res.status(500).send('Mystery transcript data not found!')
+                } else {
+                    res.status(500).send(err.code)
+                }
+            }))
     });
 
 router.route('/mystery/:dow')
     .get((req, res) => {
-        console.log(req.params.dow)
         db.select('code').from('mystery')
             .where('dayofweek_1', req.params.dow)
             .orWhere('dayofweek_2', req.params.dow)
             .then((data) => {
-                console.log(data[0].code)
                 db.select(
-                    'description', 'image', 'media_file', 'vtt_file'
+                    'code', 'description', 'image', 'media_file', 'vtt_file'
                 ).from('mystery').where('code', '=', data[0].code)
                     .then((data => {
-                        res.send(data)
+                        res.status(200).send(data)
+                    }))
+                    .catch((err => {
+                        if (typeof err.code === 'undefined') {
+                            res.status(500).send(`Mystery not found based on code provided (${req.params.dow}).`)
+                        } else {
+                            res.status(500).send(err.code)
+                        }
                     }))
             })
+            .catch((err => {
+                if (typeof err.code === 'undefined') {
+                    res.status(500).send(`Mystery not found based on day of week (${req.params.dow}) provided`)
+                } else {
+                    res.status(500).send(err.code)
+                }
+            }));
     });
 
 module.exports = router;

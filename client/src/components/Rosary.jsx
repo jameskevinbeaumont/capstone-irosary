@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-//import { audioSync } from 'audio-sync-with-text';
+// Import Components
 import { audioVTT } from './audiovtt';
+// Import Icons
 import iconPlay from '../assets/icons/Icon-play.svg';
 import iconPause from '../assets/icons/Icon-pause.svg';
 import iconVolume from '../assets/icons/Icon-volume.svg';
@@ -10,6 +11,7 @@ class Rosary extends Component {
     _isMounted = false;
 
     state = {
+        vttLoaded: false,
         url: null,
         playing: false,
         volume: 0.8,
@@ -24,8 +26,20 @@ class Rosary extends Component {
 
     componentDidMount() {
         this._isMounted = true;
+        // console.log('componentDidMount');
+    };
 
-        this.load('http://localhost:3000/assets/media/tue-fri-sorrowful.m4a');
+    componentDidUpdate() {
+        //console.log('componentDidUpdate');
+        const rprops = this.props;
+        if (this.state.vttLoaded) return;
+
+        // console.log('currentMystery: ', rprops.currentMystery[0]);
+        // console.log('currentMystery.description: ', rprops.currentMystery[0].description);
+        // console.log('currentMystery.media_file: ', rprops.currentMystery[0].media_file);
+        // console.log('currentMystery.vtt_file: ', rprops.currentMystery[0].vtt_file);
+        // console.log('url: ', this.state.url);
+
         let asOptions = {
             audioPlayer: 'audio-player',
             subtitlesContainer: 'prayer-text',
@@ -35,14 +49,19 @@ class Rosary extends Component {
             prayerSubtitle2_2: 'prayers-subtitle-2-2',
             prayerSubtitleMystery1: 'prayers-subtitle-mystery-1',
             prayerSubtitleMystery2: 'prayers-subtitle-mystery-2',
-            subtitlesFile: 'http://localhost:3000/assets/media/tue-fri-sorrowful.vtt'
+            subtitlesFile: `${window.location.protocol}//${window.location.host}/assets/media/${rprops.currentMystery[0].vtt_file}`,
+            mysteryCode: rprops.currentMystery[0].code
         };
 
-        //audioSync(asOptions);
-        audioVTT(asOptions);
-    };
+        if (!this.state.vttLoaded) {
+            console.log('Calling audioVTT(asOptions)');
+            audioVTT(asOptions);
+            this.setState({ vttLoaded: true });
+        }
 
-    componentDidUpdate() {
+        if (this.state.url === null) {
+            this.load(`${window.location.protocol}//${window.location.host}/assets/media/${rprops.currentMystery[0].media_file}`);
+        };
     };
 
     componentWillUnmount() {
@@ -191,11 +210,11 @@ class Rosary extends Component {
                                 id="of-fatima-hhq-bead"></div>
                         </div>
                         <div className="crucifix">
-                            <div className="crucifix__image"></div>
+                            <div className="crucifix__image" id="crucifix-image"></div>
                         </div>
                     </div>
                     <div className="rosary__main-middle">
-                        <section className="background">
+                        <section className="background" id="prayer-background">
                             <div className="prayers">
                                 <div
                                     className="prayers__title"

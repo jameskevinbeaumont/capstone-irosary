@@ -1,5 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv');
+const cors = require('cors');
 const morgan = require('morgan');
 const passport = require('passport');
 const session = require('express-session');
@@ -17,8 +18,11 @@ require('./config/passport')(passport);
 
 const userRoute = require('./routes/user');
 const apiRoute = require('./routes/api');
-//const vttRoute = require('./routes/vtt');
+
 const app = express();
+
+// CORS
+app.use(cors());
 
 app.use(express.json());
 app.use(bodyParser.json());

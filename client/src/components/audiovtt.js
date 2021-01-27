@@ -1,4 +1,5 @@
 import { convertVttToJson } from './vttjson';
+import axios from 'axios';
 
 export function audioVTT(options) {
 
@@ -10,7 +11,11 @@ export function audioVTT(options) {
     const prayerSubtitle2_2 = document.getElementById(options.prayerSubtitle2_2);
     const prayerSubtitleMystery1 = document.getElementById(options.prayerSubtitleMystery1);
     const prayerSubtitleMystery2 = document.getElementById(options.prayerSubtitleMystery2);
+    const prayerBackground = document.getElementById('prayer-background');
+    const crucifixImage = document.getElementById('crucifix-image');
+
     let syncData = [];
+    let syncDisplay = [];
     let saveIndex = -1;
 
     // eslint-disable-next-line
@@ -33,63 +38,32 @@ export function audioVTT(options) {
                     };
                 };
                 console.log('syncData: ', syncData);
+                axios.get(`${window.$R_URL}${window.$R_ROSARY}${options.mysteryCode}`)
+                    .then(result => {
+                        syncDisplay = result.data
+                        console.log('syncDisplay: ', syncDisplay)
+                    })
+                    .catch(err => console.log('Error=>', err.response));
             });
     };
 
     function displayPrayerTitle(index) {
-        switch (index) {
-            case 0:
-                prayerTitle.innerText = "SIGN OF THE CROSS";
-                break;
-            case 1: case 2: case 3: case 4:
-                prayerTitle.innerText = "APOSTLES' CREED";
-                break;
-            case 5: case 6:
-                prayerTitle.innerText = 'OUR FATHER';
-                break;
-            case 7: case 8:
-                prayerTitle.innerText = "HAIL MARY\n Faith";
-                break;
-            case 9: case 10:
-                prayerTitle.innerText = "HAIL MARY\n Hope";
-                break;
-            case 11: case 12:
-                prayerTitle.innerText = "HAIL MARY\n Charity";
-                break;
-            case 13:
-                prayerTitle.innerText = "GLORY BE";
-                break;
-            case 14: case 15: case 16:
-                prayerTitle.innerText = "SORROWFUL MYSTERIES";
-                prayerSubtitle1.innerText = "1";
-                prayerSubtitle2_1.innerText = "The Agony in the Garden"
-                prayerSubtitle2_2.innerText = "Fruit: Conformity to the will of God"
-                break;
-            case 40: case 41:
-                prayerSubtitleMystery1.innerText = '';
-                prayerSubtitleMystery2.innerText = 'OUR FATHER';
-                break;
-            case 17: case 18:
-                prayerSubtitleMystery1.innerText = '1';
-                prayerSubtitleMystery2.innerText = 'HAIL MARY';
-                break;
-            case 19: case 20:
-                prayerSubtitleMystery1.innerText = '2';
-                prayerSubtitleMystery2.innerText = 'HAIL MARY';
-                break;
-            case 21: case 22:
-                prayerSubtitleMystery1.innerText = '3';
-                prayerSubtitleMystery2.innerText = 'HAIL MARY';
-                break;
-            case 23: case 24:
-                prayerSubtitleMystery1.innerText = '4';
-                prayerSubtitleMystery2.innerText = 'HAIL MARY';
-                break;
-            case 37:
-                prayerSubtitleMystery1.innerText = '';
-                prayerSubtitleMystery2.innerText = 'GLORY BE';
-                break;
-            default:
+        prayerBackground.style.backgroundImage = `url('${window.location.protocol}//${window.location.host}/assets/images/${syncDisplay[index].image}')`;
+        if (syncDisplay[index].subtitle === '') {
+            prayerTitle.style.marginTop = '2rem';
+        } else {
+            prayerTitle.style.marginTop = '0';
+        };
+        prayerTitle.innerText = syncDisplay[index].title;
+        prayerSubtitle1.innerText = syncDisplay[index].subtitle;
+        prayerSubtitle2_1.innerText = syncDisplay[index].subtitle_2_1;
+        prayerSubtitle2_2.innerText = syncDisplay[index].subtitle_2_2;
+        prayerSubtitleMystery1.innerText = syncDisplay[index].subtitle_mystery_2_1;
+        prayerSubtitleMystery2.innerText = syncDisplay[index].subtitle_mystery_2_2;
+        if (syncDisplay[index].crucifix === 1) {
+            crucifixImage.style.backgroundImage = `url('${window.location.protocol}//${window.location.host}/assets/images/cross-animated-gif-60.gif')`;
+        } else {
+            crucifixImage.style.backgroundImage = `url('${window.location.protocol}//${window.location.host}/assets/images/roman-catholic-cross.png')`;
         };
     };
 
@@ -107,9 +81,15 @@ export function audioVTT(options) {
                 while (subtitles.hasChildNodes())
                     subtitles.removeChild(subtitles.firstChild)
                 el = document.createElement('span');
+                // el.classList.add('hide');
+                // setTimeout(function () {
                 el.setAttribute("id", "c_" + index);
                 el.innerText = syncData[index].part + "\n";
                 subtitles.appendChild(el);
+                // }, 500);
+                // setTimeout(function () {
+                // el.classList.remove('hide');
+                // }, 500);
                 saveIndex = index;
             }
         };

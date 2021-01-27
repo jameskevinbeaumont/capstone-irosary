@@ -1,0 +1,10 @@
+<?xml version="1.0"?><svg width="625" height="937.5" xmlns="http://www.w3.org/2000/svg">
+ <title>Cross</title>
+ <g>
+  <title>Layer 1</title>
+  <g id="layer1">
+   <path d="m262.5,93.75l0,200l-200,0l0,100l200,0l0,450l100,0l0,-450l200,0l0,-100l-200,0l0,-200l-100,0z" id="rect1061" stroke-miterlimit="4" stroke-width="5" stroke="#000000" fill="#ffffff"/>
+   <rect height="0" id="rect2304" width="8.30266" x="-583.2619" y="711.95312" stroke-miterlimit="4" stroke-width="5" stroke="#000000" fill="#ffffff"/>
+  </g>
+ </g>
+</svg>

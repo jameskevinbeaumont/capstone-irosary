@@ -40,7 +40,8 @@ input {
     background-size: cover;
     background-position: center center;
     z-index: -1;
-    opacity: .8;
+    opacity: .9;
+    transition: all 1s;
     &::before {
         content: '';
         position: absolute;
@@ -48,7 +49,7 @@ input {
         right: 0px;
         bottom: 0px;
         left: 0px;
-        background-color: rgba(44, 90, 136, .4);
+        background-color: rgba(44, 90, 136, .5);
     }
 }
 
@@ -69,7 +70,7 @@ input {
         @include tablap-h2;
         font-weight: 900;
         color: #FBE800;
-        border: 1px solid black;
+        // border: 1px solid black;
     }
     &__subtitle {
         position: relative;
@@ -80,11 +81,11 @@ input {
         top: 16px;
         font-weight: 900;
         color: #FBE800;
-        border: 1px solid black;
+        // border: 1px solid black;
         &-1 {
             width: 15%;
             @include tablap-h1;
-            border: 1px solid black;
+            // border: 1px solid black;
         }
         &-2 {
             display: flex;
@@ -93,15 +94,15 @@ input {
             width: 85%;
             @include mobile-h2;        
             color: #FFFFFF;
-            border: 1px solid black;
+            // border: 1px solid black;
             &-1 {
                 width: 100%;
-                border: 1px solid black;
+                // border: 1px solid black;
             }
             &-2 {
                 width: 100%;
                 color: #FBE800;
-                border: 1px solid black;
+                // border: 1px solid black;
             }
         }
     }
@@ -114,14 +115,14 @@ input {
         top: 42px;
         font-weight: 900;
         color: #FBE800;
-        border: 1px solid black;
+        // border: 1px solid black;
         &-1 {
             width: 10%;
             @include tablap-h1;
             justify-content: center;
             align-self: center;
             color: #FFFFFF;
-            border: 1px solid black;
+            // border: 1px solid black;
         }
         &-2 {
             width: 90%;
@@ -129,7 +130,7 @@ input {
             justify-content: center;
             align-self: center;
             text-align: center;
-            border: 1px solid black;
+            // border: 1px solid black;
         }
     }
     &__text {
@@ -141,8 +142,16 @@ input {
         @include mobile-h1;
         font-weight: 900;
         color: white;
-        border: 1px solid black;
+        // border: 1px solid black;
     }
+}
+
+span { 
+    opacity: 1; 
+    transition: all 0.5s; 
+}
+span.hide { 
+    opacity: 0; 
 }
 
 .pad {
@@ -239,30 +248,37 @@ input {
 
 .crucifix {
     @include flex-center;
+    width: 2.5rem;
     height: 8rem;
     &__image {
         position: relative;
         text-align: center;
         width: 2.5rem;
-        &::before,&::after {
-            position: absolute;
-            background-color: #7b7b7b;
-            //border: 3px solid black;
-            //box-shadow: 3px -3px 5px #999;
-            content: '';
-            height: 2.30rem;
-            width: 10px;
-            top: -10px;
-            left: 15px;
-            transform: rotate(90deg);
-        }
-        &::after {
-            width: 10px;
-            height: 4.5rem;
-            //box-shadow: 3px 3px 5px #999;
-            content: '';
-            transform: rotate(0deg);
-        }    
+        height: 8rem;
+        // background-image: url('../../assets/images/cross-animated-gif-60.gif');
+        background-image: url('../../assets/images/roman-catholic-cross.png');
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center center;
+            // &::before,&::after {
+        //     position: absolute;
+        //     background-color: #7b7b7b;
+        //     //border: 3px solid black;
+        //     //box-shadow: 3px -3px 5px #999;
+        //     content: '';
+        //     height: 2.30rem;
+        //     width: 10px;
+        //     top: -10px;
+        //     left: 15px;
+        //     transform: rotate(90deg);
+        // }
+        // &::after {
+        //     width: 10px;
+        //     height: 4.5rem;
+        //     //box-shadow: 3px 3px 5px #999;
+        //     content: '';
+        //     transform: rotate(0deg);
+        // }    
     }
 }
 
