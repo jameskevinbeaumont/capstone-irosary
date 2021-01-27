@@ -7,6 +7,7 @@ exports.up = (knex) => {
             .inTable("display_sub");
         table.string("subtitle_mystery_2_1", 2);
         table.string("subtitle_mystery_2_2", 60);
+        table.integer("decade");
         table.timestamps();
     });
 };

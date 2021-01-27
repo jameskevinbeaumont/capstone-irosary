@@ -107,7 +107,7 @@ module.exports = [
     },
     {
         index: 13,
-        display_code: "GB",
+        display_code: "GB-O",
         mystery_code: "SORROWFUL",
         bead_code: "HMC",
         created_at: moment().format(("YYYY-MM-DD HH.mm.SS.SSS")),

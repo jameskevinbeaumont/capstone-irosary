@@ -17,6 +17,7 @@ export function audioVTT(options) {
     let syncData = [];
     let syncDisplay = [];
     let saveIndex = -1;
+    let saveBead = '';
 
     // eslint-disable-next-line
     const init = function () {
@@ -48,6 +49,7 @@ export function audioVTT(options) {
     };
 
     function displayPrayerTitle(index) {
+        //let test;
         prayerBackground.style.backgroundImage = `url('${window.location.protocol}//${window.location.host}/assets/images/${syncDisplay[index].image}')`;
         if (syncDisplay[index].subtitle === '') {
             prayerTitle.style.marginTop = '2rem';
@@ -64,6 +66,59 @@ export function audioVTT(options) {
             crucifixImage.style.backgroundImage = `url('${window.location.protocol}//${window.location.host}/assets/images/cross-animated-gif-60.gif')`;
         } else {
             crucifixImage.style.backgroundImage = `url('${window.location.protocol}//${window.location.host}/assets/images/roman-catholic-cross.png')`;
+        };
+        if (syncDisplay[index].bead_code !== null) {
+            console.log('Current bead => ', syncDisplay[index].bead_code);
+            if (saveBead !== '' && saveBead !== syncDisplay[index].bead_code) {
+                switch (saveBead) {
+                    case 'OFH':
+                        document.getElementById('of-fatima-hhq-bead').className = 'of-fatima-hhq__bead';
+                        break;
+                    case 'HMF':
+                        document.getElementById('faith-bead').className = 'faith__bead';
+                        break;
+                    case 'HMH':
+                        document.getElementById('hope-bead').className = 'hope__bead';
+                        break;
+                    case 'HMC':
+                        document.getElementById('charity-bead').className = 'charity__bead';
+                        break;
+                    case 'MB':
+                        document.getElementById('mystery-bead').className = 'mystery__bead';
+                        break;
+                    default:
+                        console.log('Reset previous bead => ', `'decade-bead-${syncDisplay[saveIndex].decade}'`);
+                        document.getElementById(`decade-bead-${syncDisplay[saveIndex].decade}`).className = 'decade-bead__regular';
+                };
+                // } else {
+                //     saveBead = syncDisplay[index].bead_code;
+            };
+            if (saveBead !== syncDisplay[index].bead_code) {
+                switch (syncDisplay[index].bead_code) {
+                    case 'OFH':
+                        document.getElementById('of-fatima-hhq-bead').className = 'of-fatima-hhq__bead--highlight';
+                        break;
+                    case 'HMF':
+                        document.getElementById('faith-bead').className = 'faith__bead--highlight';
+                        break;
+                    case 'HMH':
+                        document.getElementById('hope-bead').className = 'hope__bead--highlight';
+                        break;
+                    case 'HMC':
+                        document.getElementById('charity-bead').className = 'charity__bead--highlight';
+                        break;
+                    case 'MB':
+                        document.getElementById('mystery-bead').className = 'mystery__bead--highlight';
+                        break;
+                    default:
+                        console.log('Highlight current bead => ', `'decade-bead-${syncDisplay[index].decade}'`);
+                        document.getElementById(`decade-bead-${syncDisplay[index].decade}`).className = 'decade-bead__regular--highlight';
+                };
+            };
+            if (syncDisplay[index].bead_code !== saveBead) {
+                saveBead = syncDisplay[index].bead_code;
+            };
+            console.log('Save bead => ', saveBead);
         };
     };
 

@@ -9,7 +9,7 @@ router.route('/:mystery')
             'r.index', 'ds.image', 'ds.crucifix',
             'ds.title', 'ds.subtitle', 'ds.subtitle_2_1',
             'ds.subtitle_2_2', 'd.subtitle_mystery_2_1',
-            'd.subtitle_mystery_2_2', 'r.bead_code'
+            'd.subtitle_mystery_2_2', 'd.decade', 'r.bead_code'
         )
             .from('rosary as r')
             .innerJoin('display AS d', 'd.code', 'r.display_code')

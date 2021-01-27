@@ -288,7 +288,7 @@ span.hide {
     &__regular {
         @include regular-bead;
     }
-    &__bead--highlight {
+    &__regular--highlight {
         @include regular-bead-highlight;
     }
 }
