@@ -2,10 +2,12 @@
 exports.up = (knex) => {
     return knex.schema.createTable("users", table => {
         table.increments("id").primary();
-        table.string("googleID").notNullable();
-        table.string("displayName").notNullable();
         table.string("firstName").notNullable();
         table.string("lastName").notNullable();
+        table.string("email").notNullable();
+        table.string("password").notNullable();
+        table.string("googleID");
+        table.string("displayName");
         table.string("image");
         table.timestamps();
     });

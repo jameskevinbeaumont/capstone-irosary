@@ -23,7 +23,6 @@ export function audioVTT(options) {
     const init = function () {
         return fetch(new Request(options.subtitlesFile))
             .then(response => response.text().then(function (text) {
-                //console.log(text)
                 createSubtitle(text)
             }))
     }();
@@ -49,7 +48,6 @@ export function audioVTT(options) {
     };
 
     function displayPrayerTitle(index) {
-        //let test;
         prayerBackground.style.backgroundImage = `url('${window.location.protocol}//${window.location.host}/assets/images/${syncDisplay[index].image}')`;
         if (syncDisplay[index].subtitle === '') {
             prayerTitle.style.marginTop = '2rem';

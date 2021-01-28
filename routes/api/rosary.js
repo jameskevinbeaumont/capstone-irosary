@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../../database');
-const moment = require('moment');
 
 router.route('/:mystery')
     .get((req, res) => {

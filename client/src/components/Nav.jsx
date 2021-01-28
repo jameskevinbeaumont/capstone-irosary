@@ -6,6 +6,9 @@ function Nav() {
     const navClick = () => {
         const burger = document.querySelector('.nav__burger');
         const nav = document.querySelector('.nav__links');
+        // If on the login page due to no token, do not respond
+        // to a burger click!
+        if (localStorage.getItem("token") === null) return;
         // If link clicked and burger not being displayed, exit the function
         if (window.getComputedStyle(burger).display === "none") return;
         // Toggle Nav

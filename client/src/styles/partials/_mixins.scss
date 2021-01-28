@@ -74,6 +74,11 @@
     font-weight: $font-weight;
 }
 
+@mixin mobile-h3() {
+    font-size: $m-h3;
+    line-height: $m-h3-lh;
+}
+
 @mixin mobile-p() {
     font-size: $m-h4-p;
     line-height: $m-h4-p-lh;

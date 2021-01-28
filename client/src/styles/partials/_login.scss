@@ -1,0 +1,136 @@
+/* style the container */
+.login-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 98%;
+    margin-left: 1vw;
+    border-radius: 5px;
+    top: 48px;
+    background-color: #f2f2f2;
+    padding: 20px 0 30px 0;
+    box-shadow: 0px 2px 5px rgba(12, 24, 44, 0.1);
+    &__image {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 40px;
+        &-img {
+            width: 40px;
+            height: 40px;
+        }
+    }
+    &__title {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 60px;
+        &--1 {
+            width: 100%;
+            height: 30px;
+            text-align: center;
+        }
+    }
+    &__form {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+    &__links {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        @include mobile-p;
+        width: 100%;
+        color: $color-interactive-element;
+        text-decoration: underline;
+    }
+}
+
+.form {
+    display: flex;
+    &__details, &__inputs {
+        display: flex;
+        flex-direction: column;
+    }
+    &__email, &__password {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 40px;
+    }
+    &__email-password-error {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        height: 20px;
+        @include mobile-h5-label;
+        padding-left: 20px;
+        color: red
+    }
+    &__register {
+        display: none;
+        justify-content: space-around;
+        align-items: center;
+        height: 40px;
+    }
+    &__register-error {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        height: 20px;
+    }
+    &__error-short {
+        width: 40%;
+        @include mobile-h5-label;
+        padding-left: 4px;
+        color: red
+    }
+    &__input-text {
+        @include mobile-p;
+        width: 90%;
+        height: 40px;
+        border-radius: 5px;
+        border: 1px solid $color-outline-div-bord-sort;
+        padding-left: 16px;
+        //margin-bottom: 1rem;
+        outline: none;
+        background-color: $color-text-offset;
+        &:focus {
+            border: 1px solid $color-interactive-element;
+        }
+        &:active {
+            border: 1px solid $color-interactive-element;
+            background-color: $color-text-offset;
+        }
+    }
+    &__short {
+        width: 40%;
+    }
+    &__buttons {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 68px;
+    }
+    &__button {
+        @include mobile-h2;
+        width: 90%;
+        height: 36px;
+        border-radius: 5px;
+        border: none;
+        color: $color-text-offset;
+        background-color: $color-interactive-element;
+        &:hover {
+            background-color: $color-topnav-cta-hover-bckgnd;
+        }
+    }
+}

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 // Import Components
 import { audioVTT } from './audiovtt';
 // Import Icons
@@ -11,6 +12,13 @@ class Rosary extends Component {
     _isMounted = false;
 
     state = {
+        currentMystery: {
+            code: '',
+            description: '',
+            image: '',
+            mediaFile: '',
+            vttFile: ''
+        },
         vttLoaded: false,
         url: null,
         playing: false,
@@ -26,19 +34,22 @@ class Rosary extends Component {
 
     componentDidMount() {
         this._isMounted = true;
-        // console.log('componentDidMount');
+
+        // Get current day of the week
+        const currentDate = new Date();
+        const currentDOW = currentDate.getDay() - 2;
+
+        // Axios call to get the mystery based upon the
+        // day of the week
+        axios.get(`${window.$R_URL}${window.$R_ROSARY}${window.$R_MYSTERY}${currentDOW}`)
+            .then(result => {
+                this.setState({ currentMystery: result.data })
+            })
+            .catch(err => console.log('Error=>', err.response));
     };
 
     componentDidUpdate() {
-        //console.log('componentDidUpdate');
-        const rprops = this.props;
-        if (this.state.vttLoaded) return;
-
-        // console.log('currentMystery: ', rprops.currentMystery[0]);
-        // console.log('currentMystery.description: ', rprops.currentMystery[0].description);
-        // console.log('currentMystery.media_file: ', rprops.currentMystery[0].media_file);
-        // console.log('currentMystery.vtt_file: ', rprops.currentMystery[0].vtt_file);
-        // console.log('url: ', this.state.url);
+        if (this.state.vttLoaded || !this.state.currentMystery[0].code) return;
 
         let asOptions = {
             audioPlayer: 'audio-player',
@@ -49,18 +60,17 @@ class Rosary extends Component {
             prayerSubtitle2_2: 'prayers-subtitle-2-2',
             prayerSubtitleMystery1: 'prayers-subtitle-mystery-1',
             prayerSubtitleMystery2: 'prayers-subtitle-mystery-2',
-            subtitlesFile: `${window.location.protocol}//${window.location.host}/assets/media/${rprops.currentMystery[0].vtt_file}`,
-            mysteryCode: rprops.currentMystery[0].code
+            subtitlesFile: `${window.location.protocol}//${window.location.host}/assets/media/${this.state.currentMystery[0].vtt_file}`,
+            mysteryCode: this.state.currentMystery[0].code
         };
 
         if (!this.state.vttLoaded) {
-            console.log('Calling audioVTT(asOptions)');
             audioVTT(asOptions);
             this.setState({ vttLoaded: true });
         }
 
         if (this.state.url === null) {
-            this.load(`${window.location.protocol}//${window.location.host}/assets/media/${rprops.currentMystery[0].media_file}`);
+            this.load(`${window.location.protocol}//${window.location.host}/assets/media/${this.state.currentMystery[0].media_file}`);
         };
     };
 
@@ -149,7 +159,23 @@ class Rosary extends Component {
         document.getElementById('prayers-subtitle-2-2').innerText = "";
         document.getElementById('prayers-subtitle-mystery-1').innerText = "";
         document.getElementById('prayers-subtitle-mystery-2').innerText = "";
+        document.getElementById('prayer-background').style.backgroundImage = `url('${window.location.protocol}//${window.location.host}/assets/images/marian-image-2.jpg')`;
+        document.getElementById('of-fatima-hhq-bead').className = 'of-fatima-hhq__bead';
+        document.getElementById('crucifix-image').style.backgroundImage = `url('${window.location.protocol}//${window.location.host}/assets/images/roman-catholic-cross.png')`;
+        this.resetBeads();
     };
+
+    resetBeads = () => {
+        document.getElementById('of-fatima-hhq-bead').className = 'of-fatima-hhq__bead';
+        document.getElementById('faith-bead').className = 'faith__bead';
+        document.getElementById('hope-bead').className = 'hope__bead';
+        document.getElementById('charity-bead').className = 'charity__bead';
+        document.getElementById('mystery-bead').className = 'mystery__bead';
+        for (let i = 1; i < 11; i++) {
+            document.getElementById(`decade-bead-${i}`).className = 'decade-bead__regular';
+        };
+    };
+
 
     formatTime = (seconds) => {
         const date = new Date(seconds * 1000);
@@ -168,6 +194,8 @@ class Rosary extends Component {
 
     render() {
         const { url, volume, played, duration, playedDisp, durationDisp } = this.state
+        // console.log(this.state);
+
         return (
             <div className="rosary">
                 <div className="rosary__main">
