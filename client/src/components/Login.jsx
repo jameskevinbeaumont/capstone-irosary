@@ -15,12 +15,7 @@ class Login extends Component {
     };
 
     registerUser = () => {
-        console.log('registerUser');
-        console.log('this.state.isRegistered => ', this.state.isRegistered);
         let timestamp = format(new Date(), 'yyyy-MM-dd hh.mm.ss.sss');
-        console.log(this.state.registerParams);
-        console.log(this.state.loginParams);
-        console.log(timestamp);
 
         axios.post(`${window.$R_URL}${window.$R_USER}${window.$R_REGISTER}`, {
             firstName: this.state.registerParams.firstName,
@@ -31,27 +26,21 @@ class Login extends Component {
             updated_at: timestamp
         })
             .then(result => {
-                console.log(result)
                 this.setState({ isRegistered: true })
                 this.clearEntries();
                 document.getElementById('form-register').style.display = 'none'
                 document.getElementById('passwordErr').innerText = 'User successfully added!';
             })
-            .catch(err => console.log('Error=>', err.response));
+            .catch(err => { document.getElementById('passwordErr').innerText = err.response.data });
     };
 
     loginUser = () => {
-        console.log('loginUser');
-        console.log('this.state.isRegistered => ', this.state.isRegistered);
-        console.log(this.state.registerParams);
-        console.log(this.state.loginParams);
         document.getElementById('passwordErr').innerText = '';
         axios.post(`${window.$R_URL}${window.$R_USER}${window.$R_LOGIN}`, {
             email: this.state.loginParams.emailAddress,
             password: this.state.loginParams.password
         })
             .then(result => {
-                console.log('Successful login => ', result)
                 localStorage.setItem('token', 'klq_noVh0Xkp-Vkesopvr-UJ')
                 this.setState({ islogged: true })
             })
@@ -136,14 +125,7 @@ class Login extends Component {
     };
 
     clearEntries = () => {
-        document.getElementById('firstName').value = '';
-        document.getElementById('lastName').value = '';
-        document.getElementById('emailAddress').value = '';
-        document.getElementById('password').value = '';
-        document.getElementById('firstNameErr').innerText = '';
-        document.getElementById('lastNameErr').innerText = '';
-        document.getElementById('emailAddressErr').innerText = '';
-        document.getElementById('passwordErr').innerText = '';
+        document.getElementById('login-card__form').reset();
     };
 
     render() {

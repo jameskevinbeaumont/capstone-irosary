@@ -63,9 +63,10 @@ input {
     z-index: 1;
     &__title {
         position: absolute;
-        top: 0px;
+        top: 2px;
         width: 100%;
-        height: 70px;
+        height: 60px;
+        line-height: 28px;
         text-align: center;
         @include tablap-h2;
         font-weight: 900;
@@ -77,12 +78,13 @@ input {
         display: flex;
         flex-direction: row;
         width: 100%;
-        height: 46px;
-        top: 16px;
+        height: 40px;
+        top: 18px;
         font-weight: 900;
         color: #FBE800;
         // border: 1px solid black;
         &-1 {
+            line-height: 36px;
             width: 15%;
             @include tablap-h1;
             // border: 1px solid black;
@@ -90,16 +92,19 @@ input {
         &-2 {
             display: flex;
             flex-direction: column;
-            height: 70px;
+            line-height: 18px;
+            height: 60px;
             width: 85%;
             @include mobile-h2;        
             color: #FFFFFF;
             // border: 1px solid black;
             &-1 {
+                line-height: 18px;
                 width: 100%;
                 // border: 1px solid black;
             }
             &-2 {
+                line-height: 18px;
                 width: 100%;
                 color: #FBE800;
                 // border: 1px solid black;
@@ -112,7 +117,7 @@ input {
         flex-direction: row;
         width: 100%;
         height: 32px;
-        top: 42px;
+        top: 48px;
         font-weight: 900;
         color: #FBE800;
         // border: 1px solid black;
@@ -127,6 +132,7 @@ input {
         &-2 {
             width: 90%;
             @include mobile-h2;
+            font-size: 1rem;
             justify-content: center;
             align-self: center;
             text-align: center;
@@ -136,10 +142,13 @@ input {
     }
     &__text {
         position: relative;
-        top: 46px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        top: 48px;
         text-align: center;
         height: 280px;
-        width: 100%; //240px;
+        width: 100%;
         @include mobile-h1;
         font-weight: 900;
         color: white;
@@ -256,30 +265,10 @@ span.hide {
         text-align: center;
         width: 2.5rem;
         height: 8rem;
-        // background-image: url('../../assets/images/cross-animated-gif-60.gif');
         background-image: url('../../assets/images/roman-catholic-cross.png');
         background-repeat: no-repeat;
         background-size: contain;
         background-position: center center;
-            // &::before,&::after {
-        //     position: absolute;
-        //     background-color: #7b7b7b;
-        //     //border: 3px solid black;
-        //     //box-shadow: 3px -3px 5px #999;
-        //     content: '';
-        //     height: 2.30rem;
-        //     width: 10px;
-        //     top: -10px;
-        //     left: 15px;
-        //     transform: rotate(90deg);
-        // }
-        // &::after {
-        //     width: 10px;
-        //     height: 4.5rem;
-        //     //box-shadow: 3px 3px 5px #999;
-        //     content: '';
-        //     transform: rotate(0deg);
-        // }    
     }
 }
 
@@ -313,10 +302,13 @@ span.hide {
         display: flex;
         justify-content: flex-start;
         flex-direction: row;
-        width: 100%;
+        margin: 0 auto;
+        width: 99%;
         height: 60px;
         bottom: 8px;
         background-color: $rosary-background;
+        border: 2px solid$color-outline-div-bord-sort;
+        box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.12), 4px 4px 8px rgba(0, 0, 0, 0.24);
     }
     &__play-container {
         //background-color: rgba(50,50,50,0.7);

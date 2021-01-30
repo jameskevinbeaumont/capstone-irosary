@@ -29,8 +29,8 @@ module.exports = [
         image: "glorious-1-resurrection.jpg",
         dayofweek_1: 3,
         dayofweek_2: 0,
-        media_file: "wed-sun-glorious.m4a",
-        vtt_file: "wed-sun-glorious.vtt",
+        media_file: "sun-wed-glorious.m4a",
+        vtt_file: "sun-wed-glorious.vtt",
         created_at: moment().format(("YYYY-MM-DD HH.mm.SS.SSS")),
         updated_at: moment().format(("YYYY-MM-DD HH.mm.SS.SSS"))
     },

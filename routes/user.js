@@ -1,63 +1,40 @@
 const express = require('express');
-// const cors = require('cors');
-// const session = require('express-session');
-// const bodyParser = require('body-parser');
-// const cookieParser = require('cookie-parser');
-// const User = require('../models/User');
 const db = require('../database');
 
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
-// const app = express();
-
 const router = express.Router();
-
-// app.use(cors({
-//     origin: ["http://localhost:8080"],
-//     methods: ["GET", "POST"],
-//     credentials: true
-// }));
-
-// app.use(cookieParser());
-// app.use(bodyParser.urlencoded({ extended: true }));
-
-// app.use(session({
-//     key: "userId",
-//     secret: "klq_noVh0Xkp-Vkesopvr-UJ",
-//     resave: false,
-//     saveUninitialized: false,
-//     cookie: {
-//         expires: 60 * 60 * 24,
-//     },
-// }));
 
 router.route('/register')
     .post((req, res) => {
-        console.log(req.body);
-        console.log(req.body.password);
-
-        bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
-            db.insert([{
-                firstName: req.body.firstName,
-                lastName: req.body.lastName,
-                email: req.body.email,
-                password: hash,
-                created_at: req.body.created_at,
-                updated_at: req.body.updated_at
-            }])
-                .into('users').then((data) => {
-                    res.send(data)
-                })
-        })
-
+        db.select('email')
+            .from('users')
+            .where('email', '=', req.body.email)
+            .then((data) => {
+                if (data.length !== 0) {
+                    res.status(500).send(`Email already exists!`)
+                } else {
+                    bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
+                        db.insert([{
+                            firstName: req.body.firstName,
+                            lastName: req.body.lastName,
+                            email: req.body.email,
+                            password: hash,
+                            created_at: req.body.created_at,
+                            updated_at: req.body.updated_at
+                        }])
+                            .into('users').then((data) => {
+                                res.send(data)
+                            })
+                    })
+                }
+            })
+            .catch((err => res.status(500).send(err.code)))
     });
 
 router.route('/login')
     .post((req, res) => {
-        console.log(req.body.email);
-        console.log(req.body.password);
-
         db.select(
             'firstName', 'lastName', 'email', 'password'
         )

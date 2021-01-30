@@ -10,7 +10,7 @@ function ProtectedRoute({
             {...rest}
             render={(props) => {
                 if (localStorage.getItem("token") !== null) {
-                    return <Component />;
+                    return <Component testProp={'test'} />;
                 } else {
                     return (
                         <Redirect to={{ pathname: "/login", state: { from: props.location } }} />

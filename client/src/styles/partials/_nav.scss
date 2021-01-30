@@ -48,7 +48,7 @@
         &-link {
             display: block;
             padding: .9rem;
-            color: white;
+            color: $color-divider;
             text-decoration: none;
             letter-spacing: 3px;
             font-size: 12px;
@@ -84,7 +84,7 @@
         }
     }
     &__burger div {
-        background-color: white;
+        background-color: $color-divider;
         width: 25px;
         height: 3px;
         margin: 5px;

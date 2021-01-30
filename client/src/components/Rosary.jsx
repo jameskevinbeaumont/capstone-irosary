@@ -35,9 +35,12 @@ class Rosary extends Component {
     componentDidMount() {
         this._isMounted = true;
 
+        console.log('props => ', this.props);
+        console.log('testProp => ', this.props.testProp);
+
         // Get current day of the week
         const currentDate = new Date();
-        const currentDOW = currentDate.getDay() - 2;
+        const currentDOW = currentDate.getDay();
 
         // Axios call to get the mystery based upon the
         // day of the week
