@@ -2,6 +2,26 @@ const express = require('express');
 const router = express.Router();
 const db = require('../../database');
 
+router.route('/mystery')
+    .get((req, res) => {
+        db.select(
+            'code', 'description', 'image',
+            'dayofweek_1', 'dayofweek_2',
+            'media_file', 'vtt_file', 'active'
+        )
+            .from('mystery')
+            .then((data) => {
+                res.status(200).send(data)
+            })
+            .catch((err => {
+                if (typeof err.code === 'undefined') {
+                    res.status(500).send('Mysteries not found!')
+                } else {
+                    res.status(500).send(err.code)
+                }
+            }))
+    });
+
 router.route('/:mystery')
     .get((req, res) => {
         db.select(
@@ -38,7 +58,8 @@ router.route('/mystery/:dow')
             .orWhere('dayofweek_2', req.params.dow)
             .then((data) => {
                 db.select(
-                    'code', 'description', 'image', 'media_file', 'vtt_file'
+                    'code', 'description', 'image',
+                    'media_file', 'vtt_file', 'active'
                 ).from('mystery').where('code', '=', data[0].code)
                     .then((data => {
                         res.status(200).send(data)

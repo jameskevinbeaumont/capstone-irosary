@@ -7,6 +7,7 @@ exports.up = (knex) => {
         table.integer("dayofweek_2");
         table.string("media_file", 100).notNullable();
         table.string("vtt_file", 100).notNullable();
+        table.boolean("active").notNullable();
         table.timestamps();
     });
 };

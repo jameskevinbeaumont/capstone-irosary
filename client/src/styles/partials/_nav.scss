@@ -18,7 +18,7 @@
     width: 100%;
     // min-height: 8vh;
     min-height: 2.875rem;
-    background-color: #2C5A88;
+    background-color: rgb(44, 90, 136);
     @include for-tablet-portrait-up {
         flex-direction: column;
         align-items: flex-start;
@@ -96,4 +96,16 @@
     display: flex;
     margin: 0;
     color: white;
+}
+
+.toggle .nav__burger-line1 {
+    transform: rotate(-45deg) translate(-5px, 6px);
+}
+
+.toggle .nav__burger-line2 {
+    opacity: 0;
+}
+
+.toggle .nav__burger-line3 {
+    transform: rotate(45deg) translate(-5px, -6px);
 }

@@ -37,11 +37,11 @@ export function audioVTT(options) {
                         x++;
                     };
                 };
-                console.log('syncData: ', syncData);
+                //console.log('syncData: ', syncData);
                 axios.get(`${window.$R_URL}${window.$R_ROSARY}${options.mysteryCode}`)
                     .then(result => {
                         syncDisplay = result.data
-                        console.log('syncDisplay: ', syncDisplay)
+                        //console.log('syncDisplay: ', syncDisplay)
                     })
                     .catch(err => console.log('Error=>', err.response));
             });

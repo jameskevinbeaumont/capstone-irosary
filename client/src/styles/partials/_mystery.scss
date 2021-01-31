@@ -1,0 +1,31 @@
+.mystery-side {
+    display: flex;
+    align-items: center;
+    height: 160px;
+    width: 100%;
+    padding: 1rem 1rem 1rem .25rem;
+    cursor: pointer;
+    transition: background 0.5s ease;
+    &:hover {
+        background: rgb(116, 165, 214);
+        // background: rgb(44, 90, 136);
+    }
+    &__image {
+        height: 150px;
+        width: 150px;
+        object-fit: cover;
+        border-radius: 4px;;
+    }
+    &__desc {
+        padding-left: 1rem;
+    }
+    &__name {
+        height: 46px;
+        width: 126px;
+        font-size: 1rem;
+    }
+}
+
+.selected {
+    background: rgb(116, 165, 214);
+}

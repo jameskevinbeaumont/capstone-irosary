@@ -12,13 +12,14 @@ class Rosary extends Component {
     _isMounted = false;
 
     state = {
-        currentMystery: {
+        currentMystery: [{
             code: '',
             description: '',
             image: '',
             mediaFile: '',
-            vttFile: ''
-        },
+            vttFile: '',
+            active: false
+        }],
         vttLoaded: false,
         url: null,
         playing: false,
@@ -34,9 +35,9 @@ class Rosary extends Component {
 
     componentDidMount() {
         this._isMounted = true;
-
+        console.log('componentDidMount => Rosary.js');
         console.log('props => ', this.props);
-        console.log('testProp => ', this.props.testProp);
+        console.log('mysteryStatus => ', this.props.mysteryStatus);
 
         // Get current day of the week
         const currentDate = new Date();
@@ -46,12 +47,28 @@ class Rosary extends Component {
         // day of the week
         axios.get(`${window.$R_URL}${window.$R_ROSARY}${window.$R_MYSTERY}${currentDOW}`)
             .then(result => {
+                //console.log(result.data)
+                document.getElementById('prayers-title').style.marginTop = '2rem';
+                document.getElementById('prayers-title').innerText = `Welcome ${localStorage.getItem('r_fname')}`
+                let el = document.createElement('span');
+                el.setAttribute("id", "c_initial");
+                el.innerText = `The current mystery selected is ${result.data[0].code}`
+                document.getElementById('prayer-text').appendChild(el)
+                result.data[0].active = 1;
+                console.log('currentMystery => ', result.data)
                 this.setState({ currentMystery: result.data })
+                this.props.handleCurrentMystery(result.data)
             })
             .catch(err => console.log('Error=>', err.response));
     };
 
     componentDidUpdate() {
+        if (this.props.mysteryStatus) {
+            document.getElementById('crucifix-image').style.zIndex = -1;
+        } else {
+            document.getElementById('crucifix-image').style.zIndex = 1;
+        };
+
         if (this.state.vttLoaded || !this.state.currentMystery[0].code) return;
 
         let asOptions = {
@@ -79,6 +96,12 @@ class Rosary extends Component {
 
     componentWillUnmount() {
         this._isMounted = false;
+        console.log('componentWillUnmount');
+    };
+
+    activeMysteryHandler = () => {
+        console.log('activeMysteryHandler');
+        this.setState({ mysteryStatus: !this.state.mysteryStatus });
     };
 
     load = url => {
@@ -197,7 +220,6 @@ class Rosary extends Component {
 
     render() {
         const { url, volume, played, duration, playedDisp, durationDisp } = this.state
-        // console.log(this.state);
 
         return (
             <div className="rosary">

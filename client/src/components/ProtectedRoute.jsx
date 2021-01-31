@@ -3,6 +3,8 @@ import { Route, Redirect } from "react-router-dom";
 
 function ProtectedRoute({
     component: Component,
+    mysteryStatus,
+    handleCurrentMystery,
     ...rest
 }) {
     return (
@@ -10,7 +12,10 @@ function ProtectedRoute({
             {...rest}
             render={(props) => {
                 if (localStorage.getItem("token") !== null) {
-                    return <Component testProp={'test'} />;
+                    return <Component
+                        mysteryStatus={mysteryStatus}
+                        handleCurrentMystery={handleCurrentMystery}
+                    />;
                 } else {
                     return (
                         <Redirect to={{ pathname: "/login", state: { from: props.location } }} />
