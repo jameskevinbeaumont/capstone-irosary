@@ -10,6 +10,7 @@ module.exports = [
         media_file: "tue-fri-sorrowful.m4a",
         vtt_file: "tue-fri-sorrowful.vtt",
         active: 0,
+        duration: 15,
         created_at: moment().format(("YYYY-MM-DD HH.mm.SS.SSS")),
         updated_at: moment().format(("YYYY-MM-DD HH.mm.SS.SSS"))
     },
@@ -22,6 +23,7 @@ module.exports = [
         media_file: "mon-sat-joyful.m4a",
         vtt_file: "mon-sat-joyful.vtt",
         active: 0,
+        duration: 15,
         created_at: moment().format(("YYYY-MM-DD HH.mm.SS.SSS")),
         updated_at: moment().format(("YYYY-MM-DD HH.mm.SS.SSS"))
     },
@@ -34,6 +36,7 @@ module.exports = [
         media_file: "sun-wed-glorious.m4a",
         vtt_file: "sun-wed-glorious.vtt",
         active: 0,
+        duration: 15,
         created_at: moment().format(("YYYY-MM-DD HH.mm.SS.SSS")),
         updated_at: moment().format(("YYYY-MM-DD HH.mm.SS.SSS"))
     },
@@ -46,6 +49,7 @@ module.exports = [
         media_file: "thu-luminous.m4a",
         vtt_file: "thu-luminous.vtt",
         active: 0,
+        duration: 15,
         created_at: moment().format(("YYYY-MM-DD HH.mm.SS.SSS")),
         updated_at: moment().format(("YYYY-MM-DD HH.mm.SS.SSS"))
     }

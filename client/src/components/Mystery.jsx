@@ -1,23 +1,18 @@
 import React from 'react';
 
 function Mystery({ mystery, currentMystery, mysteries, handleCurrentMystery, handleMysteries }) {
-    console.log('In Mystery.jsx');
-    console.log('Mystery code => ', mystery.code);
-    console.log('currentMystery => ', currentMystery);
-    console.log('mystery => ', mystery);
-    console.log('active => ', mystery.active);
-    // let currentCode = false;
-    // if (mystery.code === currentMystery[0].code) {
-    //     currentCode = true;
-    // };
-    // console.log('currentCode => ', currentCode);
+    // console.log('In Mystery.jsx');
+    // console.log('Mystery code => ', mystery.code);
+    // console.log('currentMystery => ', currentMystery);
+    // console.log('mystery => ', mystery);
+    // console.log('active => ', mystery.active);
 
     const mysterySelectHandler = () => {
         let newCurrentMystery = mysteries.filter(item => item.code === mystery.code);
         newCurrentMystery[0].active = 1;
-        console.log('Mystery.jsx - newCurrentMystery => ', newCurrentMystery);
+        // console.log('Mystery.jsx - newCurrentMystery => ', newCurrentMystery);
         handleCurrentMystery(newCurrentMystery);
-        console.log('Mystery.jsx - Click => ', mystery.code);
+        // console.log('Mystery.jsx - Click => ', mystery.code);
         const newMysteries = mysteries.map((item) => {
             if (mystery.code === item.code) {
                 return { ...item, active: 1 };
@@ -25,7 +20,7 @@ function Mystery({ mystery, currentMystery, mysteries, handleCurrentMystery, han
                 return { ...item, active: 0 };
             };
         });
-        console.log('newMysteries => ', newMysteries);
+        // console.log('newMysteries => ', newMysteries);
         handleMysteries(newMysteries);
     };
 

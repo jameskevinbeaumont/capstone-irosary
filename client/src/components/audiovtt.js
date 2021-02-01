@@ -66,7 +66,7 @@ export function audioVTT(options) {
             crucifixImage.style.backgroundImage = `url('${window.location.protocol}//${window.location.host}/assets/images/roman-catholic-cross.png')`;
         };
         if (syncDisplay[index].bead_code !== null) {
-            console.log('Current bead => ', syncDisplay[index].bead_code);
+            // console.log('Current bead => ', syncDisplay[index].bead_code);
             if (saveBead !== '' && saveBead !== syncDisplay[index].bead_code) {
                 switch (saveBead) {
                     case 'OFH':
@@ -85,7 +85,7 @@ export function audioVTT(options) {
                         document.getElementById('mystery-bead').className = 'mystery__bead';
                         break;
                     default:
-                        console.log('Reset previous bead => ', `'decade-bead-${syncDisplay[saveIndex].decade}'`);
+                        // console.log('Reset previous bead => ', `'decade-bead-${syncDisplay[saveIndex].decade}'`);
                         document.getElementById(`decade-bead-${syncDisplay[saveIndex].decade}`).className = 'decade-bead__regular';
                 };
                 // } else {
@@ -109,14 +109,14 @@ export function audioVTT(options) {
                         document.getElementById('mystery-bead').className = 'mystery__bead--highlight';
                         break;
                     default:
-                        console.log('Highlight current bead => ', `'decade-bead-${syncDisplay[index].decade}'`);
+                        // console.log('Highlight current bead => ', `'decade-bead-${syncDisplay[index].decade}'`);
                         document.getElementById(`decade-bead-${syncDisplay[index].decade}`).className = 'decade-bead__regular--highlight';
                 };
             };
             if (syncDisplay[index].bead_code !== saveBead) {
                 saveBead = syncDisplay[index].bead_code;
             };
-            console.log('Save bead => ', saveBead);
+            // console.log('Save bead => ', saveBead);
         };
     };
 

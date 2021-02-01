@@ -305,12 +305,14 @@ span.hide {
         display: flex;
         justify-content: flex-start;
         flex-direction: row;
-        margin: 0 auto;
+        margin-top: 1px;
+        margin-left: 2px;
+        //margin: 0 auto;
         width: 99%;
         height: 60px;
         bottom: 8px;
         background-color: $rosary-background;
-        border: 2px solid$color-outline-div-bord-sort;
+        border: 2px solid $color-outline-div-bord-sort;
         box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.12), 4px 4px 8px rgba(0, 0, 0, 0.24);
     }
     &__play-container {
@@ -323,10 +325,10 @@ span.hide {
         margin-left: 6px;
     }
     &__play-icon {
-        height: 28px;
-        width: 28px;
-        margin-top: 7px;
-        margin-left: 12px;
+        height: 44px; //28px;
+        width: 42px; //28px;
+        //margin-top: 7px;
+        //margin-left: 12px;
     }
     &__loader-container {
         display: flex;
@@ -336,7 +338,7 @@ span.hide {
         width: 52%;
         height: 38px;
         //margin-left: 8px;
-        margin-right: 8px;
+        margin-right: 2px; //8px;
     }
     &__loader {
         margin-top: 9px;
@@ -374,11 +376,11 @@ span.hide {
         margin-right: 6px;
     }
     &__volume-icon {
-        height: 28px;
-        width: 28px;
-        margin-top: 7px;
-        margin-left: 6px;
-        margin-right: 8px;
+        height: 44px; //28px;
+        width: 42px; //28px;
+        margin-top: 0px; //7px;
+        //margin-left: 6px;
+        margin-right: 4px; //8px;
     }
     &__volume-slider {
         width: 42px;

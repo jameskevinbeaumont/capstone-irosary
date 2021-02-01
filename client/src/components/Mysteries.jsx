@@ -2,9 +2,9 @@ import React from 'react';
 import Mystery from './Mystery';
 
 function Mysteries({ mysteryStatus, mysteries, currentMystery, handleCurrentMystery, handleMysteries }) {
-    console.log('In Mysteries.jsx');
-    console.log('currentMystery => ', currentMystery);
-    console.log('currentMystery.code => ', currentMystery[0].code);
+    // console.log('In Mysteries.jsx');
+    // console.log('currentMystery => ', currentMystery);
+    // console.log('currentMystery.code => ', currentMystery[0].code);
     // console.log('mysteries => ', mysteries);
 
     return (

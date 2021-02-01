@@ -2,11 +2,19 @@ import React, { Component } from 'react';
 import axios from 'axios';
 // Import Components
 import { audioVTT } from './audiovtt';
+// Import Components
+import MysteryDetailList from './MysteryDetailList';
 // Import Icons
-import iconPlay from '../assets/icons/Icon-play.svg';
-import iconPause from '../assets/icons/Icon-pause.svg';
-import iconVolume from '../assets/icons/Icon-volume.svg';
-import iconVolumeMute from '../assets/icons/Icon-volume-mute.svg';
+import iconPlay from '../assets/icons/button_black_play.png'
+//import iconPlay from '../assets/icons/Icon-play.svg';
+import iconPause from '../assets/icons/button_black_pause.png';
+//import iconPause from '../assets/icons/Icon-pause.svg';
+import iconVolume1 from '../assets/icons/audio_volume_1.png';
+import iconVolume2 from '../assets/icons/audio_volume_2.png';
+import iconVolume3 from '../assets/icons/audio_volume_3.png';
+//import iconVolume from '../assets/icons/Icon-volume.svg';
+import iconVolumeMute from '../assets/icons/audio_volume_muted.png';
+//import iconVolumeMute from '../assets/icons/Icon-volume-mute.svg';
 
 class Rosary extends Component {
     _isMounted = false;
@@ -20,27 +28,23 @@ class Rosary extends Component {
             vttFile: '',
             active: false
         }],
-        vttLoaded: false,
-        url: null,
-        playing: false,
-        volume: 0.8,
-        played: 0,
-        duration: 0,
-        paused: 0,
-        seek: false,
-        playbackRate: 1.0,
-        playedDisp: '',
-        durationDisp: ''
+        mysteryDetail: [],
+        vttLoaded: false, url: null,
+        playing: false, volume: 0.6, played: 0,
+        duration: 0, paused: 0, seek: false,
+        playbackRate: 1.0, playedDisp: '', durationDisp: ''
     };
 
     componentDidMount() {
         this._isMounted = true;
-        console.log('componentDidMount => Rosary.js');
-        console.log('props => ', this.props);
-        console.log('mysteryStatus => ', this.props.mysteryStatus);
+        // console.log('componentDidMount => Rosary.js');
+        // console.log('props => ', this.props);
+        // console.log('mysteryStatus => ', this.props.mysteryStatus);
+        // console.log('currentMystery (props) => ', this.props.currentMystery)
 
         // Get current day of the week
         const currentDate = new Date();
+        const weekDay = this.getWeekDay(currentDate);
         const currentDOW = currentDate.getDay();
 
         // Axios call to get the mystery based upon the
@@ -49,27 +53,55 @@ class Rosary extends Component {
             .then(result => {
                 //console.log(result.data)
                 document.getElementById('prayers-title').style.marginTop = '2rem';
-                document.getElementById('prayers-title').innerText = `Welcome ${localStorage.getItem('r_fname')}`
+                document.getElementById('prayers-title').innerText = `Welcome ${localStorage.getItem('r_fname')}!`
                 let el = document.createElement('span');
                 el.setAttribute("id", "c_initial");
-                el.innerText = `The current mystery selected is ${result.data[0].code}`
+                el.innerText = `Today is ${weekDay}\n\nOur mystery for today will be the ${result.data[0].description}`
                 document.getElementById('prayer-text').appendChild(el)
                 result.data[0].active = 1;
-                console.log('currentMystery => ', result.data)
+                // console.log('currentMystery (result.data) => ', result.data)
                 this.setState({ currentMystery: result.data })
                 this.props.handleCurrentMystery(result.data)
+                // console.log('currentMystery (props - after axios) => ', this.props.currentMystery)
             })
             .catch(err => console.log('Error=>', err.response));
     };
 
     componentDidUpdate() {
+        // console.log('componentDidUpdate (this.props.currentMystery) => Rosary.jsx', this.props.currentMystery);
         if (this.props.mysteryStatus) {
             document.getElementById('crucifix-image').style.zIndex = -1;
         } else {
             document.getElementById('crucifix-image').style.zIndex = 1;
         };
 
-        if (this.state.vttLoaded || !this.state.currentMystery[0].code) return;
+        if (this.state.currentMystery[0].code &&
+            this.props.currentMystery[0].code) {
+            if (this.state.currentMystery[0].code !==
+                this.props.currentMystery[0].code) {
+                let subtitles = document.getElementById('prayer-text');
+                document.getElementById('prayers-title').style.marginTop = '2rem';
+                document.getElementById('prayers-title').innerText = `${this.props.currentMystery[0].code} MYSTERIES`
+                let el = document.createElement('span');
+                while (subtitles.hasChildNodes())
+                    subtitles.removeChild(subtitles.firstChild);
+                el.setAttribute("id", "c_new-mystery");
+                el.innerText = `${localStorage.getItem('r_fname')}, you have selected the ${this.props.currentMystery[0].description}!`;
+                subtitles.appendChild(el);
+                this.setState({ currentMystery: this.props.currentMystery });
+            };
+        };
+
+        if (this.state.vttLoaded || !this.props.currentMystery[0].code) return;
+
+        // Axios call to get the mystery details based on
+        // the current mystery
+        axios.get(`${window.$R_URL}${window.$R_ROSARY}${window.$R_MYSTERY}${window.$R_DETAIL}${this.props.currentMystery[0].code}`)
+            .then(result => {
+                // console.log('mysteryDetail (rosary.js) => ', result.data)
+                this.setState({ mysteryDetail: result.data })
+            })
+            .catch(err => console.log('Error=>', err.response));
 
         let asOptions = {
             audioPlayer: 'audio-player',
@@ -80,8 +112,8 @@ class Rosary extends Component {
             prayerSubtitle2_2: 'prayers-subtitle-2-2',
             prayerSubtitleMystery1: 'prayers-subtitle-mystery-1',
             prayerSubtitleMystery2: 'prayers-subtitle-mystery-2',
-            subtitlesFile: `${window.location.protocol}//${window.location.host}/assets/media/${this.state.currentMystery[0].vtt_file}`,
-            mysteryCode: this.state.currentMystery[0].code
+            subtitlesFile: `${window.location.protocol}//${window.location.host}/assets/media/${this.props.currentMystery[0].vtt_file}`,
+            mysteryCode: this.props.currentMystery[0].code
         };
 
         if (!this.state.vttLoaded) {
@@ -90,19 +122,28 @@ class Rosary extends Component {
         }
 
         if (this.state.url === null) {
-            this.load(`${window.location.protocol}//${window.location.host}/assets/media/${this.state.currentMystery[0].media_file}`);
+            this.load(`${window.location.protocol}//${window.location.host}/assets/media/${this.props.currentMystery[0].media_file}`);
         };
     };
 
     componentWillUnmount() {
         this._isMounted = false;
-        console.log('componentWillUnmount');
+        // console.log('componentWillUnmount');
     };
 
     activeMysteryHandler = () => {
-        console.log('activeMysteryHandler');
+        // console.log('activeMysteryHandler');
         this.setState({ mysteryStatus: !this.state.mysteryStatus });
     };
+
+    getWeekDay = (date) => {
+        //Create an array containing each day, starting with Sunday.
+        let weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        //Use the getDay() method to get the day.
+        let day = date.getDay();
+        //Return the element that corresponds to that index.
+        return weekdays[day];
+    }
 
     load = url => {
         this.setState({
@@ -144,7 +185,14 @@ class Rosary extends Component {
         if (audio.volume === 0) {
             icon.src = iconVolumeMute;
         } else {
-            icon.src = iconVolume;
+            let vol = audio.volume;
+            if (vol > 0 && vol < 0.4) {
+                icon.src = iconVolume1;
+            } else if (vol > 0.3 && vol < 0.7) {
+                icon.src = iconVolume2;
+            } else {
+                icon.src = iconVolume3;
+            };
         };
     };
 
@@ -399,12 +447,13 @@ class Rosary extends Component {
                     <div className="audio__volume-container">
                         <img className="audio__volume-icon"
                             id="audio-volume-icon"
-                            src={iconVolume}
+                            src={iconVolume2}
                             alt="volume icon"
                         />
                         <input type='range' className="audio__volume-slider" min={0} max={1} step='any' value={volume} onChange={this.handleVolumeChange} />
                     </div>
                 </div>
+                <MysteryDetailList detailList={this.state.mysteryDetail} />
             </div>
         );
     };

@@ -4,6 +4,7 @@ import { Route, Redirect } from "react-router-dom";
 function ProtectedRoute({
     component: Component,
     mysteryStatus,
+    currentMystery,
     handleCurrentMystery,
     ...rest
 }) {
@@ -14,6 +15,7 @@ function ProtectedRoute({
                 if (localStorage.getItem("token") !== null) {
                     return <Component
                         mysteryStatus={mysteryStatus}
+                        currentMystery={currentMystery}
                         handleCurrentMystery={handleCurrentMystery}
                     />;
                 } else {

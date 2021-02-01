@@ -39,7 +39,7 @@ router.route('/:mystery')
                 if (data.length !== 0) {
                     res.status(200).send(data)
                 } else {
-                    res.status(500).send(`Transcript data not found base on mystery provided (${req.params.mystery}).`)
+                    res.status(500).send(`Transcript data not found based on mystery provided (${req.params.mystery}).`)
                 }
             })
             .catch((err => {
@@ -79,6 +79,33 @@ router.route('/mystery/:dow')
                     res.status(500).send(err.code)
                 }
             }));
+    });
+
+router.route('/mystery/detail/:code')
+    .get((req, res) => {
+        db.select(
+            'code', 'image', 'title', 'subtitle',
+            'detail_1', 'detail_2', 'detail_3',
+            'detail_4', 'detail_5', 'detail_6',
+            'detail_7', 'detail_8', 'detail_9',
+            'detail_10'
+        )
+            .from('mystery_detail')
+            .where('mystery_code', req.params.code)
+            .then((data) => {
+                if (data.length !== 0) {
+                    res.status(200).send(data)
+                } else {
+                    res.status(500).send(`Mystery details not found based on mystery code provided (${req.params.mystery}).`)
+                }
+            })
+            .catch((err => {
+                if (typeof err.code === 'undefined') {
+                    res.status(500).send('Mystery details not found!')
+                } else {
+                    res.status(500).send(err.code)
+                }
+            }))
     });
 
 module.exports = router;

@@ -8,6 +8,7 @@ exports.up = (knex) => {
         table.string("media_file", 100).notNullable();
         table.string("vtt_file", 100).notNullable();
         table.boolean("active").notNullable();
+        table.integer("duration").notNullable();
         table.timestamps();
     });
 };

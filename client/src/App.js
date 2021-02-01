@@ -21,15 +21,15 @@ class App extends Component {
 
   componentDidMount() {
     this._isMounted = true;
-    console.log('componentDidMount => App.js');
+    // console.log('componentDidMount => App.js');
     // Axios call to get ALL of the mysteries
     axios.get(`${window.$R_URL}${window.$R_ROSARY}${window.$R_MYSTERY}`)
       .then(result => {
-        console.log('mysteries (App.js) => ', result.data)
-        console.log('currentMystery (App.js) => ', this.state.currentMystery);
+        // console.log('mysteries (App.js) => ', result.data)
+        // console.log('currentMystery (App.js) => ', this.state.currentMystery);
         let currentIndex = result.data.findIndex(mystery =>
           mystery.code === this.state.currentMystery[0].code)
-        console.log(currentIndex)
+        // console.log(currentIndex)
         result.data[currentIndex].active = 1
         this.setState({ mysteries: result.data })
       })
@@ -41,12 +41,12 @@ class App extends Component {
   }
 
   currentMysteryHandler = (currentMystery) => {
-    console.log('currentMystery (App.js) => ', currentMystery);
+    // console.log('currentMystery (App.js) => ', currentMystery);
     this.setState({ currentMystery: currentMystery });
   };
 
   mysteriesHandler = (newMysteries) => {
-    console.log('newMysteries (App.js) => ', newMysteries);
+    // console.log('newMysteries (App.js) => ', newMysteries);
     this.setState({ mysteries: newMysteries });
   };
 
@@ -70,6 +70,7 @@ class App extends Component {
             <ProtectedRoute path="/rosary"
               component={Rosary}
               mysteryStatus={this.state.mysteryStatus}
+              currentMystery={this.state.currentMystery}
               handleCurrentMystery={this.currentMysteryHandler}
             />
             <Route exact path="/">

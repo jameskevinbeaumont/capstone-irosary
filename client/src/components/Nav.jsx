@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 function Nav({ mysteryStatus, handleActiveMystery }) {
     // Nav Click Function
     const navClick = (menuItem) => {
-        console.log(menuItem);
+        // console.log(menuItem);
         const burger = document.querySelector('.nav__burger');
         const nav = document.querySelector('.nav__links');
         // If on the login page due to no token, do not respond
@@ -24,7 +24,7 @@ function Nav({ mysteryStatus, handleActiveMystery }) {
         nav.classList.toggle('nav-active');
         // Mysteries link
         if (menuItem === 'Mysteries') {
-            console.log('MYSTERIES');
+            // console.log('MYSTERIES');
             burger.classList.toggle('toggle');
             document.querySelector('.nav__burger-line2').style.opacity = 0;
             handleActiveMystery();
@@ -38,7 +38,7 @@ function Nav({ mysteryStatus, handleActiveMystery }) {
 
     return (
         <header className="header">
-            {console.log({ mysteryStatus })}
+            {/* {console.log({ mysteryStatus })} */}
             <nav className="nav">
                 <div className="nav__logo">
                     <Link to="/" className="nav__logo--link">iRosary</Link>

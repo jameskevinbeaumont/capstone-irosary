@@ -6,6 +6,10 @@ const Mystery = bookshelf.model("Mystery", {
 
     rosary: function () {
         return this.hasMany("Rosary");
+    },
+
+    mysteryDetail: function () {
+        return this.hasMany("MysteryDetail");
     }
 });
 

@@ -41,7 +41,7 @@ class Login extends Component {
             password: this.state.loginParams.password
         })
             .then(result => {
-                console.log('result from login => ', result)
+                //console.log('result from login => ', result)
                 localStorage.setItem('token', 'klq_noVh0Xkp-Vkesopvr-UJ')
                 localStorage.setItem('r_fname', result.data[0].firstName)
                 this.setState({ islogged: true })
