@@ -9,6 +9,8 @@ import { Nav, ProtectedRoute, Login, Rosary, Mysteries } from './components';
 class App extends Component {
   state = {
     mysteryStatus: false,
+    vttLoaded: false,
+    currentTime: 0,
     mysteries: [],
     currentMystery: [{
       code: '',
@@ -21,17 +23,17 @@ class App extends Component {
 
   componentDidMount() {
     this._isMounted = true;
-    // console.log('componentDidMount => App.js');
+    //console.log('App.js - componentDidMount');
     // Axios call to get ALL of the mysteries
     axios.get(`${window.$R_URL}${window.$R_ROSARY}${window.$R_MYSTERY}`)
       .then(result => {
-        // console.log('mysteries (App.js) => ', result.data)
-        // console.log('currentMystery (App.js) => ', this.state.currentMystery);
         let currentIndex = result.data.findIndex(mystery =>
           mystery.code === this.state.currentMystery[0].code)
-        // console.log(currentIndex)
-        result.data[currentIndex].active = 1
-        this.setState({ mysteries: result.data })
+        if (currentIndex !== -1) {
+          result.data[currentIndex].active = 1
+          this.setState({ mysteries: result.data })
+          //console.log('App.js - mysteries => ', result.data)
+        }
       })
       .catch(err => console.log('Error=>', err.response));
   };
@@ -41,13 +43,16 @@ class App extends Component {
   }
 
   currentMysteryHandler = (currentMystery) => {
-    // console.log('currentMystery (App.js) => ', currentMystery);
     this.setState({ currentMystery: currentMystery });
   };
 
   mysteriesHandler = (newMysteries) => {
-    // console.log('newMysteries (App.js) => ', newMysteries);
     this.setState({ mysteries: newMysteries });
+  };
+
+  currentPlaybackHandler = (vttLoaded, currentTime) => {
+    this.setState({ vttLoaded: vttLoaded });
+    this.setState({ currentTime: currentTime });
   };
 
   render() {
@@ -70,8 +75,12 @@ class App extends Component {
             <ProtectedRoute path="/rosary"
               component={Rosary}
               mysteryStatus={this.state.mysteryStatus}
+              mysteries={this.state.mysteries}
               currentMystery={this.state.currentMystery}
               handleCurrentMystery={this.currentMysteryHandler}
+              vttLoaded={this.state.vttLoaded}
+              currentTime={this.state.currentTime}
+              handleCurrentPlayback={this.currentPlaybackHandler}
             />
             <Route exact path="/">
               <Redirect exact from="/" to="/rosary" />

@@ -4,17 +4,14 @@ import axios from 'axios';
 import { audioVTT } from './audiovtt';
 // Import Components
 import MysteryDetailList from './MysteryDetailList';
+import Footer from './Footer';
 // Import Icons
 import iconPlay from '../assets/icons/button_black_play.png'
-//import iconPlay from '../assets/icons/Icon-play.svg';
 import iconPause from '../assets/icons/button_black_pause.png';
-//import iconPause from '../assets/icons/Icon-pause.svg';
 import iconVolume1 from '../assets/icons/audio_volume_1.png';
 import iconVolume2 from '../assets/icons/audio_volume_2.png';
 import iconVolume3 from '../assets/icons/audio_volume_3.png';
-//import iconVolume from '../assets/icons/Icon-volume.svg';
 import iconVolumeMute from '../assets/icons/audio_volume_muted.png';
-//import iconVolumeMute from '../assets/icons/Icon-volume-mute.svg';
 
 class Rosary extends Component {
     _isMounted = false;
@@ -38,37 +35,49 @@ class Rosary extends Component {
     componentDidMount() {
         this._isMounted = true;
         // console.log('componentDidMount => Rosary.js');
-        // console.log('props => ', this.props);
-        // console.log('mysteryStatus => ', this.props.mysteryStatus);
-        // console.log('currentMystery (props) => ', this.props.currentMystery)
+        // console.log('this.props.mysteries => ', this.props.mysteries);
 
         // Get current day of the week
         const currentDate = new Date();
         const weekDay = this.getWeekDay(currentDate);
         const currentDOW = currentDate.getDay();
 
-        // Axios call to get the mystery based upon the
-        // day of the week
         axios.get(`${window.$R_URL}${window.$R_ROSARY}${window.$R_MYSTERY}${currentDOW}`)
             .then(result => {
-                //console.log(result.data)
-                document.getElementById('prayers-title').style.marginTop = '2rem';
+                document.getElementById('prayers-title').style.marginTop = '2rem'
                 document.getElementById('prayers-title').innerText = `Welcome ${localStorage.getItem('r_fname')}!`
-                let el = document.createElement('span');
-                el.setAttribute("id", "c_initial");
+                let el = document.createElement('span')
+                el.setAttribute("id", "c_initial")
                 el.innerText = `Today is ${weekDay}\n\nOur mystery for today will be the ${result.data[0].description}`
                 document.getElementById('prayer-text').appendChild(el)
-                result.data[0].active = 1;
-                // console.log('currentMystery (result.data) => ', result.data)
+                if (this.state.currentMystery[0].code === '') {
+                    result.data[0].active = 1
+                }
                 this.setState({ currentMystery: result.data })
                 this.props.handleCurrentMystery(result.data)
-                // console.log('currentMystery (props - after axios) => ', this.props.currentMystery)
             })
             .catch(err => console.log('Error=>', err.response));
+
+        document.querySelector('.footer').style.marginTop = '10px';
     };
 
     componentDidUpdate() {
-        // console.log('componentDidUpdate (this.props.currentMystery) => Rosary.jsx', this.props.currentMystery);
+        // console.log('componentDidUpdate (Rosary.jsx)');
+        // console.log('this.props.mysteries => ', this.props.mysteries);
+        let activeIndex = this.props.mysteries.findIndex(mystery => mystery.active === 1);
+        if (this.props.mysteries.length !== 0) {
+            if (this.props.mysteries[activeIndex].code !== this.state.currentMystery[0].code) {
+                console.log('First, going to reset audioVTT');
+                this.resetAudioVTT();
+                axios.get(`${window.$R_URL}${window.$R_ROSARY}${window.$R_MYSTERY}${this.props.mysteries[activeIndex].dayofweek_1}`)
+                    .then(result => {
+                        this.setState({ currentMystery: result.data })
+                        this.props.handleCurrentMystery(result.data)
+                    })
+                    .catch(err => console.log('Error=>', err.response));
+            };
+        };
+
         if (this.props.mysteryStatus) {
             document.getElementById('crucifix-image').style.zIndex = -1;
         } else {
@@ -89,16 +98,18 @@ class Rosary extends Component {
                 el.innerText = `${localStorage.getItem('r_fname')}, you have selected the ${this.props.currentMystery[0].description}!`;
                 subtitles.appendChild(el);
                 this.setState({ currentMystery: this.props.currentMystery });
+                this.setState({ vttLoaded: false });
+                this.setState({ url: null });
+                this.props.handleCurrentPlayback(this.state.vttLoaded, 0);
             };
         };
 
         if (this.state.vttLoaded || !this.props.currentMystery[0].code) return;
-
+        //console.log('3');
         // Axios call to get the mystery details based on
         // the current mystery
         axios.get(`${window.$R_URL}${window.$R_ROSARY}${window.$R_MYSTERY}${window.$R_DETAIL}${this.props.currentMystery[0].code}`)
             .then(result => {
-                // console.log('mysteryDetail (rosary.js) => ', result.data)
                 this.setState({ mysteryDetail: result.data })
             })
             .catch(err => console.log('Error=>', err.response));
@@ -113,7 +124,8 @@ class Rosary extends Component {
             prayerSubtitleMystery1: 'prayers-subtitle-mystery-1',
             prayerSubtitleMystery2: 'prayers-subtitle-mystery-2',
             subtitlesFile: `${window.location.protocol}//${window.location.host}/assets/media/${this.props.currentMystery[0].vtt_file}`,
-            mysteryCode: this.props.currentMystery[0].code
+            mysteryCode: this.props.currentMystery[0].code,
+            unmountComponent: false
         };
 
         if (!this.state.vttLoaded) {
@@ -127,12 +139,31 @@ class Rosary extends Component {
     };
 
     componentWillUnmount() {
+        //console.log('componentWillUnmount');
         this._isMounted = false;
-        // console.log('componentWillUnmount');
+        let audio = document.getElementById('audio-player');
+        this.props.handleCurrentPlayback(this.state.vttLoaded, audio.currentTime);
+        this.resetAudioVTT();
+    };
+
+    resetAudioVTT = () => {
+        let asOptions = {
+            audioPlayer: 'audio-player',
+            subtitlesContainer: '',
+            prayerTitle: '',
+            prayerSubtitle1: '',
+            prayerSubtitle2_1: '',
+            prayerSubtitle2_2: '',
+            prayerSubtitleMystery1: '',
+            prayerSubtitleMystery2: '',
+            subtitlesFile: '',
+            mysteryCode: '',
+            unmountComponent: true
+        };
+        audioVTT(asOptions);
     };
 
     activeMysteryHandler = () => {
-        // console.log('activeMysteryHandler');
         this.setState({ mysteryStatus: !this.state.mysteryStatus });
     };
 
@@ -454,6 +485,7 @@ class Rosary extends Component {
                     </div>
                 </div>
                 <MysteryDetailList detailList={this.state.mysteryDetail} />
+                <Footer />
             </div>
         );
     };

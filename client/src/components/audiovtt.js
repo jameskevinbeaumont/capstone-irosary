@@ -18,6 +18,15 @@ export function audioVTT(options) {
     let syncDisplay = [];
     let saveIndex = -1;
     let saveBead = '';
+    let timeStamp = Math.floor(Date.now() / 1000);
+    //console.log(timeStamp);
+
+    if (options.unmountComponent) {
+        syncData.splice(0, syncData.length);
+        syncDisplay.splice(0, syncDisplay.length);
+        audioPlayer.removeEventListener('timeupdate', handlerFunc);
+        return;
+    };
 
     // eslint-disable-next-line
     const init = function () {
@@ -37,10 +46,16 @@ export function audioVTT(options) {
                         x++;
                     };
                 };
+                syncData.forEach(function (obj) {
+                    obj.TS = timeStamp;
+                });
                 //console.log('syncData: ', syncData);
                 axios.get(`${window.$R_URL}${window.$R_ROSARY}${options.mysteryCode}`)
                     .then(result => {
                         syncDisplay = result.data
+                        syncDisplay.forEach(function (obj) {
+                            obj.TS = timeStamp;
+                        });
                         //console.log('syncDisplay: ', syncDisplay)
                     })
                     .catch(err => console.log('Error=>', err.response));
@@ -48,6 +63,16 @@ export function audioVTT(options) {
     };
 
     function displayPrayerTitle(index) {
+        //console.log('displayPrayerTitle (index) => ', index)
+        // let index =
+        //     syncDisplay.findIndex(element => {
+        //         if (element.index === sdIndex && element.TS === timeStamp) { return true; };
+        //         return false;
+        //     });
+
+        // let index = 0;
+        // let syncDisplayNew = syncDisplay.filter(item => item.index === sdIndex && item.TS === timeStamp);
+
         prayerBackground.style.backgroundImage = `url('${window.location.protocol}//${window.location.host}/assets/images/${syncDisplay[index].image}')`;
         if (syncDisplay[index].subtitle === '') {
             prayerTitle.style.marginTop = '2rem';
@@ -66,7 +91,7 @@ export function audioVTT(options) {
             crucifixImage.style.backgroundImage = `url('${window.location.protocol}//${window.location.host}/assets/images/roman-catholic-cross.png')`;
         };
         if (syncDisplay[index].bead_code !== null) {
-            // console.log('Current bead => ', syncDisplay[index].bead_code);
+            //console.log('Current bead => ', syncDisplay[index].bead_code);
             if (saveBead !== '' && saveBead !== syncDisplay[index].bead_code) {
                 switch (saveBead) {
                     case 'OFH':
@@ -88,8 +113,6 @@ export function audioVTT(options) {
                         // console.log('Reset previous bead => ', `'decade-bead-${syncDisplay[saveIndex].decade}'`);
                         document.getElementById(`decade-bead-${syncDisplay[saveIndex].decade}`).className = 'decade-bead__regular';
                 };
-                // } else {
-                //     saveBead = syncDisplay[index].bead_code;
             };
             if (saveBead !== syncDisplay[index].bead_code) {
                 switch (syncDisplay[index].bead_code) {
@@ -120,31 +143,55 @@ export function audioVTT(options) {
         };
     };
 
-    audioPlayer.addEventListener("timeupdate", function (_e) {
+    function handlerFunc() {
         let el;
         let index =
             syncData.findIndex(element => {
-                if ((audioPlayer.currentTime * 1000) >= element.start &&
-                    (audioPlayer.currentTime * 1000) <= element.end) { return true; };
+                if (((audioPlayer.currentTime * 1000) >= element.start &&
+                    (audioPlayer.currentTime * 1000) <= element.end) &&
+                    element.TS === timeStamp) { return true; };
                 return false;
             });
+        // console.log(index);
+        // console.log(syncData[index]);
         if (index !== -1) {
             if (index !== saveIndex) {
                 displayPrayerTitle(index);
                 while (subtitles.hasChildNodes())
                     subtitles.removeChild(subtitles.firstChild)
                 el = document.createElement('span');
-                // el.classList.add('hide');
-                // setTimeout(function () {
                 el.setAttribute("id", "c_" + index);
                 el.innerText = syncData[index].part + "\n";
                 subtitles.appendChild(el);
-                // }, 500);
-                // setTimeout(function () {
-                // el.classList.remove('hide');
-                // }, 500);
                 saveIndex = index;
             }
         };
-    });
+    };
+
+    audioPlayer.addEventListener('timeupdate', handlerFunc);
+
+    // document.getElementById('audio-player').removeEventListener('timeupdate', handlerFunc);
+
+
+    // audioPlayer.addEventListener("timeupdate", function (e) {
+    //     let el;
+    //     let index =
+    //         syncData.findIndex(element => {
+    //             if ((audioPlayer.currentTime * 1000) >= element.start &&
+    //                 (audioPlayer.currentTime * 1000) <= element.end) { return true; };
+    //             return false;
+    //         });
+    //     if (index !== -1) {
+    //         if (index !== saveIndex) {
+    //             displayPrayerTitle(index);
+    //             while (subtitles.hasChildNodes())
+    //                 subtitles.removeChild(subtitles.firstChild)
+    //             el = document.createElement('span');
+    //             el.setAttribute("id", "c_" + index);
+    //             el.innerText = syncData[index].part + "\n";
+    //             subtitles.appendChild(el);
+    //             saveIndex = index;
+    //         }
+    //     };
+    // });
 };

@@ -3,8 +3,8 @@ import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 //import moment from 'react-moment';
 import { format } from 'date-fns';
-
-//axios.defaults.withCredentials = true;
+// Import Components
+import Footer from './Footer';
 
 class Login extends Component {
     state = {
@@ -12,6 +12,10 @@ class Login extends Component {
         isRegistered: true,
         loginParams: { emailAddress: '', password: '' },
         registerParams: { firstName: '', lastName: '' }
+    };
+
+    componentDidMount() {
+        document.querySelector('.footer').style.marginTop = '25px';
     };
 
     registerUser = () => {
@@ -211,9 +215,7 @@ class Login extends Component {
                         {this.state.isRegistered ? registerWording : loginWording}
                     </div>
                 </div>
-                <div className="form__footer">
-
-                </div>
+                <Footer />
             </div>
         );
     };

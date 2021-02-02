@@ -52,7 +52,7 @@ function Nav({ mysteryStatus, handleActiveMystery }) {
                     <li><Link to="/" className="nav__links-link"
                         onClick={() => navClick('Mysteries')}>Mysteries</Link>
                     </li>
-                    <li><Link to="#" className="nav__links-link" onClick={navClick}>About</Link></li>
+                    {/* <li><Link to="#" className="nav__links-link" onClick={navClick}>About</Link></li> */}
                     <li><Link to="/" className="nav__links-link"
                         onClick={() => navClick('Logout')}>Logout</Link>
                     </li>
