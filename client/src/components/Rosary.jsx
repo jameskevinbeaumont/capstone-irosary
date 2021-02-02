@@ -67,7 +67,7 @@ class Rosary extends Component {
         let activeIndex = this.props.mysteries.findIndex(mystery => mystery.active === 1);
         if (this.props.mysteries.length !== 0) {
             if (this.props.mysteries[activeIndex].code !== this.state.currentMystery[0].code) {
-                console.log('First, going to reset audioVTT');
+                //console.log('First, going to reset audioVTT');
                 this.resetAudioVTT();
                 axios.get(`${window.$R_URL}${window.$R_ROSARY}${window.$R_MYSTERY}${this.props.mysteries[activeIndex].dayofweek_1}`)
                     .then(result => {
