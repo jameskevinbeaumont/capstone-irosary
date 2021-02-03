@@ -17,6 +17,10 @@ class Rosary extends Component {
     _isMounted = false;
 
     state = {
+        prayersTitleText: '',
+        prayerText: '',
+        introMargin: false,
+        backgroundImage: '',
         currentMystery: [{
             code: '',
             description: '',
@@ -37,19 +41,17 @@ class Rosary extends Component {
         // console.log('componentDidMount => Rosary.js');
         // console.log('this.props.mysteries => ', this.props.mysteries);
 
-        // Get current day of the week
         const currentDate = new Date();
         const weekDay = this.getWeekDay(currentDate);
         const currentDOW = currentDate.getDay();
 
         axios.get(`${window.$R_URL}${window.$R_ROSARY}${window.$R_MYSTERY}${currentDOW}`)
             .then(result => {
-                document.getElementById('prayers-title').style.marginTop = '2rem'
-                document.getElementById('prayers-title').innerText = `Welcome ${localStorage.getItem('r_fname')}!`
-                let el = document.createElement('span')
-                el.setAttribute("id", "c_initial")
-                el.innerText = `Today is ${weekDay}\n\nOur mystery for today will be the ${result.data[0].description}`
-                document.getElementById('prayer-text').appendChild(el)
+                this.setState({ introMargin: true })
+                this.setState({ prayersTitleText: `Welcome ${localStorage.getItem('r_fname')}!` })
+                this.setState({
+                    prayerText: `Today is ${weekDay}\n\nOur mystery for today will be the ${result.data[0].description}`
+                })
                 if (this.state.currentMystery[0].code === '') {
                     result.data[0].active = 1
                 }
@@ -57,8 +59,6 @@ class Rosary extends Component {
                 this.props.handleCurrentMystery(result.data)
             })
             .catch(err => console.log('Error=>', err.response));
-
-        document.querySelector('.footer').style.marginTop = '10px';
     };
 
     componentDidUpdate() {
@@ -78,25 +78,15 @@ class Rosary extends Component {
             };
         };
 
-        if (this.props.mysteryStatus) {
-            document.getElementById('crucifix-image').style.zIndex = -1;
-        } else {
-            document.getElementById('crucifix-image').style.zIndex = 1;
-        };
-
         if (this.state.currentMystery[0].code &&
             this.props.currentMystery[0].code) {
             if (this.state.currentMystery[0].code !==
                 this.props.currentMystery[0].code) {
-                let subtitles = document.getElementById('prayer-text');
-                document.getElementById('prayers-title').style.marginTop = '2rem';
-                document.getElementById('prayers-title').innerText = `${this.props.currentMystery[0].code} MYSTERIES`
-                let el = document.createElement('span');
-                while (subtitles.hasChildNodes())
-                    subtitles.removeChild(subtitles.firstChild);
-                el.setAttribute("id", "c_new-mystery");
-                el.innerText = `${localStorage.getItem('r_fname')}, you have selected the ${this.props.currentMystery[0].description}!`;
-                subtitles.appendChild(el);
+                this.setState({ introMargin: true })
+                this.setState({ prayersTitleText: `${this.props.currentMystery[0].code} MYSTERIES` })
+                this.setState({
+                    prayerText: `${localStorage.getItem('r_fname')}, you have selected the ${this.props.currentMystery[0].description}!`
+                })
                 this.setState({ currentMystery: this.props.currentMystery });
                 this.setState({ vttLoaded: false });
                 this.setState({ url: null });
@@ -105,7 +95,6 @@ class Rosary extends Component {
         };
 
         if (this.state.vttLoaded || !this.props.currentMystery[0].code) return;
-        //console.log('3');
         // Axios call to get the mystery details based on
         // the current mystery
         axios.get(`${window.$R_URL}${window.$R_ROSARY}${window.$R_MYSTERY}${window.$R_DETAIL}${this.props.currentMystery[0].code}`)
@@ -299,6 +288,8 @@ class Rosary extends Component {
 
     render() {
         const { url, volume, played, duration, playedDisp, durationDisp } = this.state
+        // let prayerText = this.state.prayerText.split('\n').map((item, i) => <p key={i}>{item}</p>);
+        // console.log(prayerText);
 
         return (
             <div className="rosary">
@@ -342,7 +333,12 @@ class Rosary extends Component {
                                 id="of-fatima-hhq-bead"></div>
                         </div>
                         <div className="crucifix">
-                            <div className="crucifix__image" id="crucifix-image"></div>
+                            <div
+                                className="crucifix__image"
+                                id="crucifix-image"
+                                style={{ zIndex: this.props.mysteryStatus ? -1 : 1 }}
+                            >
+                            </div>
                         </div>
                     </div>
                     <div className="rosary__main-middle">
@@ -350,7 +346,10 @@ class Rosary extends Component {
                             <div className="prayers">
                                 <div
                                     className="prayers__title"
-                                    id="prayers-title">
+                                    id="prayers-title"
+                                    style={{ marginTop: this.state.introMargin ? 2 + 'rem' : 0 }}
+                                >
+                                    {this.state.prayersTitleText}
                                 </div>
                                 <div className="prayers__subtitle">
                                     <div
@@ -376,7 +375,11 @@ class Rosary extends Component {
                                         className="prayers__subtitle-mystery-2"
                                         id="prayers-subtitle-mystery-2"></div>
                                 </div>
-                                <div className="prayers__text" id="prayer-text">
+                                <div
+                                    className="prayers__text"
+                                    id="prayer-text"
+                                    style={{ whiteSpace: 'pre-wrap' }}>
+                                    {this.state.prayerText}
                                 </div>
                             </div>
                         </section>
@@ -485,7 +488,7 @@ class Rosary extends Component {
                     </div>
                 </div>
                 <MysteryDetailList detailList={this.state.mysteryDetail} />
-                <Footer />
+                <Footer style={{ marginTop: "10px" }} />
             </div>
         );
     };

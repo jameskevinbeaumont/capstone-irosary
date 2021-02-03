@@ -11,11 +11,12 @@ class Login extends Component {
         islogged: false,
         isRegistered: true,
         loginParams: { emailAddress: '', password: '' },
-        registerParams: { firstName: '', lastName: '' }
-    };
-
-    componentDidMount() {
-        document.querySelector('.footer').style.marginTop = '25px';
+        registerParams: { firstName: '', lastName: '' },
+        display: false,
+        firstNameErr: '',
+        lastNameErr: '',
+        emailAddressErr: '',
+        passwordErr: ''
     };
 
     registerUser = () => {
@@ -32,26 +33,25 @@ class Login extends Component {
             .then(result => {
                 this.setState({ isRegistered: true })
                 this.clearEntries();
-                document.getElementById('form-register').style.display = 'none'
-                document.getElementById('passwordErr').innerText = 'User successfully added!';
+                this.setState({ display: false });
+                this.setState({ passwordErr: 'User successfully added!' });
             })
-            .catch(err => { document.getElementById('passwordErr').innerText = err.response.data });
+            .catch(err => { this.setState({ passwordErr: err.response.data }) });
     };
 
     loginUser = () => {
-        document.getElementById('passwordErr').innerText = '';
+        this.setState({ passwordErr: '' });
         axios.post(`${window.$R_URL}${window.$R_USER}${window.$R_LOGIN}`, {
             email: this.state.loginParams.emailAddress,
             password: this.state.loginParams.password
         })
             .then(result => {
-                //console.log('result from login => ', result)
                 localStorage.setItem('token', 'klq_noVh0Xkp-Vkesopvr-UJ')
                 localStorage.setItem('r_fname', result.data[0].firstName)
                 this.setState({ islogged: true })
             })
-            .catch(err => { document.getElementById('passwordErr').innerText = err.response.data });
-    }
+            .catch(err => { this.setState({ passwordErr: err.response.data }) });
+    };
 
     handleFormChange = (e) => {
         let val = e.target.value;
@@ -74,9 +74,9 @@ class Login extends Component {
         this.clearEntries();
 
         if (currentIsRegistered) {
-            document.getElementById('form-register').style.display = 'none';
+            this.setState({ display: false });
         } else {
-            document.getElementById('form-register').style.display = 'flex';
+            this.setState({ display: true });
         };
 
         this.setState({ isRegistered: currentIsRegistered });
@@ -96,34 +96,35 @@ class Login extends Component {
 
     validEntries = () => {
         let valid = true;
-        document.getElementById('emailAddressErr').innerText = '';
-        document.getElementById('passwordErr').innerText = '';
+        this.setState({ emailAddressErr: '' });
+        this.setState({ passwordErr: '' });
 
         if (!this.state.isRegistered) {
-            document.getElementById('firstNameErr').innerText = '';
-            document.getElementById('lastNameErr').innerText = '';
+            this.setState({ firstNameErr: '' });
+            this.setState({ lastNameErr: '' });
             if (this.state.registerParams.firstName === '') {
-                document.getElementById('firstNameErr').innerText = 'First name required';
+                this.setState({ firstNameErr: 'First name required' });
                 valid = false;
-            } else if (this.state.registerParams.lastName === '') {
-                document.getElementById('lastNameErr').innerText = 'Last name required';
+            };
+            if (this.state.registerParams.lastName === '') {
+                this.setState({ lastNameErr: 'Last name required' });
                 valid = false;
-            }
+            };
         };
         if (this.state.loginParams.emailAddress === '') {
-            document.getElementById('emailAddressErr').innerText = 'Email required';
+            this.setState({ emailAddressErr: 'Email required' });
             valid = false;
         } else if (this.state.loginParams.emailAddress !== '') {
             // eslint-disable-next-line
             let regex = /^(([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5}){1,25})+([;.](([a-zA-Z0-9_\-\.]+)@{[a-zA-Z0-9_\-\.]+0\.([a-zA-Z]{2,5}){1,25})+)*$/;
             if (regex.test(this.state.loginParams.emailAddress) === false) {
-                document.getElementById('emailAddressErr').innerText = 'Invalid email entered';
+                this.setState({ emailAddressErr: 'Invalid email entered' });
                 valid = false;
             }
         };
 
         if (this.state.loginParams.password.length < 6) {
-            document.getElementById('passwordErr').innerText = 'Password must be at least 6 characters';
+            this.setState({ passwordErr: 'Password must be at least 6 characters' });
             valid = false;
         };
 
@@ -159,7 +160,10 @@ class Login extends Component {
                     className="login-card__form" id="login-card__form" >
                     <div className="form__details">
                         <div className="form__inputs">
-                            <div className="form__register" id="form-register">
+                            <div className="form__register"
+                                id="form-register"
+                                style={{ display: this.state.display ? 'flex' : 'none' }}
+                            >
                                 <input
                                     className="form__input-text form__short"
                                     type="text" name="firstName"
@@ -176,8 +180,8 @@ class Login extends Component {
                                 </input>
                             </div>
                             <div className="form__register-error">
-                                <div className="form__error-short" id="firstNameErr"></div>
-                                <div className="form__error-short" id="lastNameErr"></div>
+                                <div className="form__error-short" id="firstNameErr">{this.state.firstNameErr}</div>
+                                <div className="form__error-short" id="lastNameErr">{this.state.lastNameErr}</div>
                             </div>
                             <div className="form__email">
                                 <input
@@ -188,7 +192,7 @@ class Login extends Component {
                                     placeholder="Email Address *">
                                 </input>
                             </div>
-                            <div className="form__email-password-error" id="emailAddressErr"></div>
+                            <div className="form__email-password-error" id="emailAddressErr">{this.state.emailAddressErr}</div>
                             <div className="form__password">
                                 <input
                                     className="form__input-text"
@@ -198,7 +202,7 @@ class Login extends Component {
                                     placeholder="Password *">
                                 </input>
                             </div>
-                            <div className="form__email-password-error" id="passwordErr"></div>
+                            <div className="form__email-password-error" id="passwordErr">{this.state.passwordErr}</div>
                         </div>
                         <div className="form__buttons">
                             <input type="submit"
@@ -215,7 +219,7 @@ class Login extends Component {
                         {this.state.isRegistered ? registerWording : loginWording}
                     </div>
                 </div>
-                <Footer />
+                <Footer style={{ marginTop: "25px" }} />
             </div>
         );
     };
