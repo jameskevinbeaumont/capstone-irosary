@@ -264,7 +264,8 @@ span.hide {
     height: 8rem;
     &__image {
         position: relative;
-        text-align: center;
+        // text-align: center;
+        left: 2%;
         width: 2.5rem;
         height: 8rem;
         background-image: url('../../assets/images/roman-catholic-cross.png');

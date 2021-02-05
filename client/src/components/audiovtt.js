@@ -33,8 +33,11 @@ export function audioVTT(options) {
         return fetch(new Request(options.subtitlesFile))
             .then(response => response.text().then(function (text) {
                 createSubtitle(text)
+                //console.log('!', syncData)
             }))
     }();
+
+    //return syncData;
 
     function createSubtitle(text) {
         convertVttToJson(text)

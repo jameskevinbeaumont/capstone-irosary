@@ -33,7 +33,11 @@ class Rosary extends Component {
         vttLoaded: false, url: null,
         playing: false, volume: 0.6, played: 0,
         duration: 0, paused: 0, seek: false,
-        playbackRate: 1.0, playedDisp: '', durationDisp: ''
+        playbackRate: 1.0, playedDisp: '', durationDisp: '',
+        syncData: [],
+        syncDisplay: [],
+        saveIndex: 0,
+        saveBead: ''
     };
 
     componentDidMount() {
@@ -42,8 +46,8 @@ class Rosary extends Component {
         // console.log('this.props.mysteries => ', this.props.mysteries);
 
         const currentDate = new Date();
-        const weekDay = this.getWeekDay(currentDate);
-        const currentDOW = currentDate.getDay();
+        const weekDay = "Friday"; //this.getWeekDay(currentDate);
+        const currentDOW = currentDate.getDay() + 1;
 
         axios.get(`${window.$R_URL}${window.$R_ROSARY}${window.$R_MYSTERY}${currentDOW}`)
             .then(result => {
@@ -63,6 +67,7 @@ class Rosary extends Component {
 
     componentDidUpdate() {
         // console.log('componentDidUpdate (Rosary.jsx)');
+        // console.log('this.state.syncData => ', this.state.syncData);
         // console.log('this.props.mysteries => ', this.props.mysteries);
         let activeIndex = this.props.mysteries.findIndex(mystery => mystery.active === 1);
         if (this.props.mysteries.length !== 0) {
@@ -118,7 +123,9 @@ class Rosary extends Component {
         };
 
         if (!this.state.vttLoaded) {
-            audioVTT(asOptions);
+            this.setState({ syncData: audioVTT(asOptions) });
+            // let testReturn = audioVTT(asOptions);
+            // console.log('testReturn => ', testReturn);
             this.setState({ vttLoaded: true });
         }
 
