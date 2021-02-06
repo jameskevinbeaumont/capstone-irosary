@@ -311,7 +311,7 @@ module.exports = [
     },
     {
         code: "4M-L",
-        image: "luminous-4-eucharist.jpg",
+        image: "luminous-4-transfiguration.jpg",
         crucifix: false,
         title: "LUMINOUS MYSTERIES",
         subtitle: "4",
@@ -322,7 +322,7 @@ module.exports = [
     },
     {
         code: "5M-L",
-        image: "luminous-4-transfiguration.jpg",
+        image: "luminous-5-eucharist.jpg",
         crucifix: false,
         title: "LUMINOUS MYSTERIES",
         subtitle: "5",

@@ -31,7 +31,7 @@ class Rosary extends Component {
         }],
         mysteryDetail: [],
         vttLoaded: false, url: null,
-        playing: false, volume: 0.6, played: 0,
+        playing: false, volume: 0.4, played: 0,
         duration: 0, paused: 0, seek: false,
         playbackRate: 1.0, playedDisp: '', durationDisp: '',
         syncData: [],
@@ -46,8 +46,8 @@ class Rosary extends Component {
         // console.log('this.props.mysteries => ', this.props.mysteries);
 
         const currentDate = new Date();
-        const weekDay = "Friday"; //this.getWeekDay(currentDate);
-        const currentDOW = currentDate.getDay() + 1;
+        const weekDay = this.getWeekDay(currentDate);
+        const currentDOW = currentDate.getDay();
 
         axios.get(`${window.$R_URL}${window.$R_ROSARY}${window.$R_MYSTERY}${currentDOW}`)
             .then(result => {
