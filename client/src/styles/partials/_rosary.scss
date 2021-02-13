@@ -264,7 +264,6 @@ span.hide {
     height: 8rem;
     &__image {
         position: relative;
-        // text-align: center;
         left: 2%;
         width: 2.5rem;
         height: 8rem;
@@ -308,7 +307,6 @@ span.hide {
         flex-direction: row;
         margin-top: 1px;
         margin-left: 2px;
-        //margin: 0 auto;
         width: 99%;
         height: 60px;
         bottom: 8px;
@@ -317,7 +315,6 @@ span.hide {
         box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.12), 4px 4px 8px rgba(0, 0, 0, 0.24);
     }
     &__play-container {
-        //background-color: rgba(50,50,50,0.7);
         background-color: $rosary-background;
         border-radius: 4px;
         width: 44px;
@@ -326,20 +323,16 @@ span.hide {
         margin-left: 6px;
     }
     &__play-icon {
-        height: 44px; //28px;
-        width: 42px; //28px;
-        //margin-top: 7px;
-        //margin-left: 12px;
+        height: 44px;
+        width: 42px;
     }
     &__loader-container {
         display: flex;
-        //background-color: rgba(50,50,50,0.7);
         background-color: $rosary-background;
         border-radius: 4px;
         width: 52%;
         height: 38px;
-        //margin-left: 8px;
-        margin-right: 2px; //8px;
+        margin-right: 2px;
     }
     &__loader {
         margin-top: 9px;
@@ -368,7 +361,6 @@ span.hide {
     }
     &__volume-container {
         display: flex;
-        //background-color: rgba(50,50,50,0.7);
         background-color: $rosary-background;
         border-radius: 4px;
         width: 90px;
@@ -377,11 +369,10 @@ span.hide {
         margin-right: 6px;
     }
     &__volume-icon {
-        height: 44px; //28px;
-        width: 42px; //28px;
-        margin-top: 0px; //7px;
-        //margin-left: 6px;
-        margin-right: 4px; //8px;
+        height: 44px;
+        width: 42px;
+        margin-top: 0px;
+        margin-right: 4px;
     }
     &__volume-slider {
         width: 42px;
