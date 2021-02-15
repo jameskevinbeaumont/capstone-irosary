@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 // Import Components
-//import { audioVTT } from './audiovtt';
 import { syncVTT } from './syncvtt';
 // Import Components
 import MysteryDetailList from './MysteryDetailList';
@@ -55,9 +54,10 @@ class Rosary extends Component {
             vttFile: '',
             active: false
         }],
+        newMysterySelected: false,
         mysteryDetail: [],
         vttLoaded: false, url: null,
-        playing: false, volume: 0.4, played: 0,
+        playing: false, volume: 0.6, played: 0,
         duration: 0, paused: 0, seek: false,
         playbackRate: 1.0, playedDisp: '', durationDisp: '',
         syncData: [],
@@ -70,10 +70,6 @@ class Rosary extends Component {
         this._isMounted = true;
         // console.log('componentDidMount => Rosary.js');
         // console.log('this.props.mysteries => ', this.props.mysteries);
-
-        console.log('beadDecade => ', this.state.beadDecade);
-        console.log('beadDecade[0].className => ', this.state.beadDecade[0].className);
-        console.log('beadDecade[9].className => ', this.state.beadDecade[9].className);
 
         // Creating event listener - audio HTML element will raise the
         // timeupdate event each second
@@ -108,8 +104,6 @@ class Rosary extends Component {
         let activeIndex = this.props.mysteries.findIndex(mystery => mystery.active === 1);
         if (this.props.mysteries.length !== 0) {
             if (this.props.mysteries[activeIndex].code !== this.state.currentMystery[0].code) {
-                //console.log('First, going to reset audioVTT');
-                //this.resetAudioVTT();
                 axios.get(`${window.$R_URL}${window.$R_ROSARY}${window.$R_MYSTERY}${this.props.mysteries[activeIndex].dayofweek_1}`)
                     .then(result => {
                         this.setState({ currentMystery: result.data })
@@ -131,6 +125,7 @@ class Rosary extends Component {
                 this.setState({ currentMystery: this.props.currentMystery });
                 this.setState({ vttLoaded: false });
                 this.setState({ url: null });
+                this.setState({ newMysterySelected: true });
                 this.props.handleCurrentPlayback(this.state.vttLoaded, 0);
             };
         };
@@ -147,50 +142,22 @@ class Rosary extends Component {
             })
             .catch(err => console.log('Error=>', err.response));
 
-        // let asOptions = {
-        //     audioPlayer: 'audio-player',
-        //     subtitlesContainer: 'prayer-text',
-        //     prayerTitle: 'prayers-title',
-        //     prayerSubtitle1: 'prayers-subtitle-1',
-        //     prayerSubtitle2_1: 'prayers-subtitle-2-1',
-        //     prayerSubtitle2_2: 'prayers-subtitle-2-2',
-        //     prayerSubtitleMystery1: 'prayers-subtitle-mystery-1',
-        //     prayerSubtitleMystery2: 'prayers-subtitle-mystery-2',
-        //     subtitlesFile: `${window.location.protocol}//${window.location.host}/assets/media/${this.props.currentMystery[0].vtt_file}`,
-        //     mysteryCode: this.props.currentMystery[0].code,
-        //     unmountComponent: false
-        // };
-
         if (!this.state.vttLoaded) {
-            // console.log('#2 this.state.vttLoaded => ', this.state.vttLoaded);
             let svOptions = {
                 subtitlesFile: `${window.location.protocol}//${window.location.host}/assets/media/${this.props.currentMystery[0].vtt_file}`,
             };
             syncVTT(svOptions)
                 .then(resultvtt => {
-                    // console.log('syncData[] => ', resultvtt)
                     this.setState({ syncData: resultvtt })
                     this.setState({ vttLoaded: true });
                     axios.get(`${window.$R_URL}${window.$R_ROSARY}${this.props.currentMystery[0].code}`)
                         .then(result => {
-                            // console.log('syncDisplay[] => ', result.data)
                             this.setState({ syncDisplay: result.data })
                         })
                         .catch(err => console.log('Error=>', err.response));
                 })
                 .catch(err => console.log('Error =>', err.response));
-            //this.setState({ syncData: syncVTT(svOptions) });
-            // let testReturn = syncVTT(svOptions);
-            // console.log('testReturn => ', testReturn);
-            //this.setState({ vttLoaded: true });
         };
-
-        // if (!this.state.vttLoaded) {
-        //     this.setState({ syncData: audioVTT(asOptions) });
-        //     // let testReturn = audioVTT(asOptions);
-        //     // console.log('testReturn => ', testReturn);
-        //     this.setState({ vttLoaded: true });
-        // }
 
         if (this.state.url === null) {
             this.load(`${window.location.protocol}//${window.location.host}/assets/media/${this.props.currentMystery[0].media_file}`);
@@ -202,25 +169,7 @@ class Rosary extends Component {
         this._isMounted = false;
         let audio = document.getElementById('audio-player');
         this.props.handleCurrentPlayback(this.state.vttLoaded, audio.currentTime);
-        // this.resetAudioVTT();
     };
-
-    // resetAudioVTT = () => {
-    //     let asOptions = {
-    //         audioPlayer: 'audio-player',
-    //         subtitlesContainer: '',
-    //         prayerTitle: '',
-    //         prayerSubtitle1: '',
-    //         prayerSubtitle2_1: '',
-    //         prayerSubtitle2_2: '',
-    //         prayerSubtitleMystery1: '',
-    //         prayerSubtitleMystery2: '',
-    //         subtitlesFile: '',
-    //         mysteryCode: '',
-    //         unmountComponent: true
-    //     };
-    //     audioVTT(asOptions);
-    // };
 
     activeMysteryHandler = () => {
         this.setState({ mysteryStatus: !this.state.mysteryStatus });
@@ -236,7 +185,6 @@ class Rosary extends Component {
     }
 
     timeupdateHandler = () => {
-        // console.log('timeupdateHandler');
         let index =
             this.state.syncData.findIndex(element => {
                 if (((this.state.audioPlayer.currentTime * 1000) >= element.start &&
@@ -244,11 +192,9 @@ class Rosary extends Component {
                 return false;
             });
 
-        // console.log('index => ', index);
         if (index !== -1) {
             if (index !== this.state.saveIndex) {
                 this.displayPrayerTitle(index);
-                // console.log('new saveIndex => ', index);
                 this.setState({ saveIndex: index });
             }
         };
@@ -347,8 +293,13 @@ class Rosary extends Component {
         if (audio.paused || audio.ended) {
             let newPlayed = this.state.playedDisp.split(":");
             let newPlayedSecs = (Number(newPlayed[0]) * 60) + Number(newPlayed[1]);
+
             if (newPlayedSecs === 0) {
-                this.resetPrayers();
+                if (!this.state.newMysterySelected) {
+                    this.resetPrayers();
+                } else {
+                    this.setState({ newMysterySelected: false });
+                };
             };
             if (this.state.seek) {
                 audio.currentTime = newPlayedSecs;
@@ -412,28 +363,30 @@ class Rosary extends Component {
     };
 
     resetPrayers = () => {
-        document.getElementById('prayer-text').innerText = "";
-        document.getElementById('prayers-title').innerText = "";
-        document.getElementById('prayers-subtitle-1').innerText = "";
-        document.getElementById('prayers-subtitle-2-1').innerText = "";
-        document.getElementById('prayers-subtitle-2-2').innerText = "";
-        document.getElementById('prayers-subtitle-mystery-1').innerText = "";
-        document.getElementById('prayers-subtitle-mystery-2').innerText = "";
-        document.getElementById('prayer-background').style.backgroundImage = `url('${window.location.protocol}//${window.location.host}/assets/images/marian-image-2.jpg')`;
-        document.getElementById('of-fatima-hhq-bead').className = 'of-fatima-hhq__bead';
-        document.getElementById('crucifix-image').style.backgroundImage = `url('${window.location.protocol}//${window.location.host}/assets/images/roman-catholic-cross.png')`;
+        this.setState({ prayersBackgroundImage: `url('${window.location.protocol}//${window.location.host}/assets/images/marian-image-2.jpg')` });
+        this.setState({ introMargin: true });
+        this.setState({ prayersTitleText: `Thank you for praying with us ${localStorage.getItem('r_fname')}!` });
+        this.setState({ prayersSubtitle1: '' });
+        this.setState({ prayersSubtitle2_1: '' });
+        this.setState({ prayersSubtitle2_2: '' });
+        this.setState({ prayersSubtitleMystery1: '' });
+        this.setState({ prayersSubtitleMystery2: '' });
+        this.setState({ crucifixImage: `url('${window.location.protocol}//${window.location.host}/assets/images/roman-catholic-cross.png')` });
+        this.setState({ prayerText: 'Select play to restart or select another mystery if you wish!' });
         this.resetBeads();
     };
 
     resetBeads = () => {
-        document.getElementById('of-fatima-hhq-bead').className = 'of-fatima-hhq__bead';
-        document.getElementById('faith-bead').className = 'faith__bead';
-        document.getElementById('hope-bead').className = 'hope__bead';
-        document.getElementById('charity-bead').className = 'charity__bead';
-        document.getElementById('mystery-bead').className = 'mystery__bead';
-        for (let i = 1; i < 11; i++) {
-            document.getElementById(`decade-bead-${i}`).className = 'decade-bead__regular';
+        this.setState({ beadOFFatimaHHQ: 'of-fatima-hhq__bead' });
+        this.setState({ beadFaith: 'faith__bead' });
+        this.setState({ beadHope: 'hope__bead' });
+        this.setState({ beadCharity: 'charity__bead' });
+        this.setState({ beadMystery: 'mystery__bead' });
+        let newBeadDecade = this.state.beadDecade;
+        for (let i = 0; i < 10; i++) {
+            newBeadDecade[i].className = 'decade-bead__regular';
         };
+        this.setState({ beadDecade: newBeadDecade });
     };
 
 
@@ -454,8 +407,6 @@ class Rosary extends Component {
 
     render() {
         const { url, volume, played, duration, playedDisp, durationDisp } = this.state
-        // let prayerText = this.state.prayerText.split('\n').map((item, i) => <p key={i}>{item}</p>);
-        // console.log(prayerText);
 
         return (
             <div className="rosary">
