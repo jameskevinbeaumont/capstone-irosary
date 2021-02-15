@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 function Nav({ mysteryStatus, handleActiveMystery }) {
     // Nav Click Function
     const navClick = (menuItem) => {
-        // console.log(menuItem);
         const burger = document.querySelector('.nav__burger');
         const nav = document.querySelector('.nav__links');
         // If on the login page due to no token, do not respond
