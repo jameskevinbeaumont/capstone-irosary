@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 // Import Components
-import { audioVTT } from './audiovtt';
+//import { audioVTT } from './audiovtt';
+import { syncVTT } from './syncvtt';
 // Import Components
 import MysteryDetailList from './MysteryDetailList';
 import Footer from './Footer';
@@ -17,10 +18,35 @@ class Rosary extends Component {
     _isMounted = false;
 
     state = {
+        audioPlayer: '',
         prayersTitleText: '',
+        prayersSubtitle1: '',
+        prayersSubtitle2_1: '',
+        prayersSubtitle2_2: '',
+        prayersSubtitleMystery1: '',
+        prayersSubtitleMystery2: '',
+        prayersBackgroundImage: '',
+        crucifixImage: '',
         prayerText: '',
         introMargin: false,
         backgroundImage: '',
+        beadOFFatimaHHQ: 'of-fatima-hhq__bead',
+        beadFaith: 'faith__bead',
+        beadHope: 'hope__bead',
+        beadCharity: 'charity__bead',
+        beadMystery: 'mystery__bead',
+        beadDecade: [
+            { className: 'decade-bead__regular' },
+            { className: 'decade-bead__regular' },
+            { className: 'decade-bead__regular' },
+            { className: 'decade-bead__regular' },
+            { className: 'decade-bead__regular' },
+            { className: 'decade-bead__regular' },
+            { className: 'decade-bead__regular' },
+            { className: 'decade-bead__regular' },
+            { className: 'decade-bead__regular' },
+            { className: 'decade-bead__regular' }
+        ],
         currentMystery: [{
             code: '',
             description: '',
@@ -36,7 +62,7 @@ class Rosary extends Component {
         playbackRate: 1.0, playedDisp: '', durationDisp: '',
         syncData: [],
         syncDisplay: [],
-        saveIndex: 0,
+        saveIndex: -1,
         saveBead: ''
     };
 
@@ -44,6 +70,16 @@ class Rosary extends Component {
         this._isMounted = true;
         // console.log('componentDidMount => Rosary.js');
         // console.log('this.props.mysteries => ', this.props.mysteries);
+
+        console.log('beadDecade => ', this.state.beadDecade);
+        console.log('beadDecade[0].className => ', this.state.beadDecade[0].className);
+        console.log('beadDecade[9].className => ', this.state.beadDecade[9].className);
+
+        // Creating event listener - audio HTML element will raise the
+        // timeupdate event each second
+        let audio = document.getElementById('audio-player');
+        this.setState({ audioPlayer: audio });
+        audio.addEventListener('timeupdate', this.timeupdateHandler);
 
         const currentDate = new Date();
         const weekDay = this.getWeekDay(currentDate);
@@ -73,7 +109,7 @@ class Rosary extends Component {
         if (this.props.mysteries.length !== 0) {
             if (this.props.mysteries[activeIndex].code !== this.state.currentMystery[0].code) {
                 //console.log('First, going to reset audioVTT');
-                this.resetAudioVTT();
+                //this.resetAudioVTT();
                 axios.get(`${window.$R_URL}${window.$R_ROSARY}${window.$R_MYSTERY}${this.props.mysteries[activeIndex].dayofweek_1}`)
                     .then(result => {
                         this.setState({ currentMystery: result.data })
@@ -99,6 +135,9 @@ class Rosary extends Component {
             };
         };
 
+        // console.log('this.state.vttLoaded => ', this.state.vttLoaded);
+        // console.log('this.props.currentMystery[0].code => ', this.props.currentMystery[0].code);
+
         if (this.state.vttLoaded || !this.props.currentMystery[0].code) return;
         // Axios call to get the mystery details based on
         // the current mystery
@@ -108,26 +147,50 @@ class Rosary extends Component {
             })
             .catch(err => console.log('Error=>', err.response));
 
-        let asOptions = {
-            audioPlayer: 'audio-player',
-            subtitlesContainer: 'prayer-text',
-            prayerTitle: 'prayers-title',
-            prayerSubtitle1: 'prayers-subtitle-1',
-            prayerSubtitle2_1: 'prayers-subtitle-2-1',
-            prayerSubtitle2_2: 'prayers-subtitle-2-2',
-            prayerSubtitleMystery1: 'prayers-subtitle-mystery-1',
-            prayerSubtitleMystery2: 'prayers-subtitle-mystery-2',
-            subtitlesFile: `${window.location.protocol}//${window.location.host}/assets/media/${this.props.currentMystery[0].vtt_file}`,
-            mysteryCode: this.props.currentMystery[0].code,
-            unmountComponent: false
-        };
+        // let asOptions = {
+        //     audioPlayer: 'audio-player',
+        //     subtitlesContainer: 'prayer-text',
+        //     prayerTitle: 'prayers-title',
+        //     prayerSubtitle1: 'prayers-subtitle-1',
+        //     prayerSubtitle2_1: 'prayers-subtitle-2-1',
+        //     prayerSubtitle2_2: 'prayers-subtitle-2-2',
+        //     prayerSubtitleMystery1: 'prayers-subtitle-mystery-1',
+        //     prayerSubtitleMystery2: 'prayers-subtitle-mystery-2',
+        //     subtitlesFile: `${window.location.protocol}//${window.location.host}/assets/media/${this.props.currentMystery[0].vtt_file}`,
+        //     mysteryCode: this.props.currentMystery[0].code,
+        //     unmountComponent: false
+        // };
 
         if (!this.state.vttLoaded) {
-            this.setState({ syncData: audioVTT(asOptions) });
-            // let testReturn = audioVTT(asOptions);
+            // console.log('#2 this.state.vttLoaded => ', this.state.vttLoaded);
+            let svOptions = {
+                subtitlesFile: `${window.location.protocol}//${window.location.host}/assets/media/${this.props.currentMystery[0].vtt_file}`,
+            };
+            syncVTT(svOptions)
+                .then(resultvtt => {
+                    // console.log('syncData[] => ', resultvtt)
+                    this.setState({ syncData: resultvtt })
+                    this.setState({ vttLoaded: true });
+                    axios.get(`${window.$R_URL}${window.$R_ROSARY}${this.props.currentMystery[0].code}`)
+                        .then(result => {
+                            // console.log('syncDisplay[] => ', result.data)
+                            this.setState({ syncDisplay: result.data })
+                        })
+                        .catch(err => console.log('Error=>', err.response));
+                })
+                .catch(err => console.log('Error =>', err.response));
+            //this.setState({ syncData: syncVTT(svOptions) });
+            // let testReturn = syncVTT(svOptions);
             // console.log('testReturn => ', testReturn);
-            this.setState({ vttLoaded: true });
-        }
+            //this.setState({ vttLoaded: true });
+        };
+
+        // if (!this.state.vttLoaded) {
+        //     this.setState({ syncData: audioVTT(asOptions) });
+        //     // let testReturn = audioVTT(asOptions);
+        //     // console.log('testReturn => ', testReturn);
+        //     this.setState({ vttLoaded: true });
+        // }
 
         if (this.state.url === null) {
             this.load(`${window.location.protocol}//${window.location.host}/assets/media/${this.props.currentMystery[0].media_file}`);
@@ -139,25 +202,25 @@ class Rosary extends Component {
         this._isMounted = false;
         let audio = document.getElementById('audio-player');
         this.props.handleCurrentPlayback(this.state.vttLoaded, audio.currentTime);
-        this.resetAudioVTT();
+        // this.resetAudioVTT();
     };
 
-    resetAudioVTT = () => {
-        let asOptions = {
-            audioPlayer: 'audio-player',
-            subtitlesContainer: '',
-            prayerTitle: '',
-            prayerSubtitle1: '',
-            prayerSubtitle2_1: '',
-            prayerSubtitle2_2: '',
-            prayerSubtitleMystery1: '',
-            prayerSubtitleMystery2: '',
-            subtitlesFile: '',
-            mysteryCode: '',
-            unmountComponent: true
-        };
-        audioVTT(asOptions);
-    };
+    // resetAudioVTT = () => {
+    //     let asOptions = {
+    //         audioPlayer: 'audio-player',
+    //         subtitlesContainer: '',
+    //         prayerTitle: '',
+    //         prayerSubtitle1: '',
+    //         prayerSubtitle2_1: '',
+    //         prayerSubtitle2_2: '',
+    //         prayerSubtitleMystery1: '',
+    //         prayerSubtitleMystery2: '',
+    //         subtitlesFile: '',
+    //         mysteryCode: '',
+    //         unmountComponent: true
+    //     };
+    //     audioVTT(asOptions);
+    // };
 
     activeMysteryHandler = () => {
         this.setState({ mysteryStatus: !this.state.mysteryStatus });
@@ -171,6 +234,102 @@ class Rosary extends Component {
         //Return the element that corresponds to that index.
         return weekdays[day];
     }
+
+    timeupdateHandler = () => {
+        // console.log('timeupdateHandler');
+        let index =
+            this.state.syncData.findIndex(element => {
+                if (((this.state.audioPlayer.currentTime * 1000) >= element.start &&
+                    (this.state.audioPlayer.currentTime * 1000) <= element.end)) { return true; };
+                return false;
+            });
+
+        // console.log('index => ', index);
+        if (index !== -1) {
+            if (index !== this.state.saveIndex) {
+                this.displayPrayerTitle(index);
+                // console.log('new saveIndex => ', index);
+                this.setState({ saveIndex: index });
+            }
+        };
+    };
+
+    displayPrayerTitle = (index) => {
+        this.setState({ prayersBackgroundImage: `url('${window.location.protocol}//${window.location.host}/assets/images/${this.state.syncDisplay[index].image}')` });
+
+        if (this.state.syncDisplay[index].subtitle === '') {
+            this.setState({ introMargin: true });
+        } else {
+            this.setState({ introMargin: false });
+        };
+
+        this.setState({ prayersTitleText: this.state.syncDisplay[index].title });
+        this.setState({ prayersSubtitle1: this.state.syncDisplay[index].subtitle });
+        this.setState({ prayersSubtitle2_1: this.state.syncDisplay[index].subtitle_2_1 });
+        this.setState({ prayersSubtitle2_2: this.state.syncDisplay[index].subtitle_2_2 });
+        this.setState({ prayersSubtitleMystery1: this.state.syncDisplay[index].subtitle_mystery_2_1 });
+        this.setState({ prayersSubtitleMystery2: this.state.syncDisplay[index].subtitle_mystery_2_2 });
+
+        if (this.state.syncDisplay[index].crucifix === 1) {
+            this.setState({ crucifixImage: `url('${window.location.protocol}//${window.location.host}/assets/images/cross-animated-gif-60.gif')` });
+        } else {
+            this.setState({ crucifixImage: `url('${window.location.protocol}//${window.location.host}/assets/images/roman-catholic-cross.png')` });
+        };
+
+        this.setState({ prayerText: this.state.syncData[index].part });
+
+        if (this.state.syncDisplay[index].bead_code !== null) {
+            if (this.state.saveBead !== '' && this.state.saveBead !== this.state.syncDisplay[index].bead_code) {
+                switch (this.state.saveBead) {
+                    case 'OFH':
+                        this.setState({ beadOFFatimaHHQ: 'of-fatima-hhq__bead' });
+                        break;
+                    case 'HMF':
+                        this.setState({ beadFaith: 'faith__bead' });
+                        break;
+                    case 'HMH':
+                        this.setState({ beadHope: 'hope__bead' });
+                        break;
+                    case 'HMC':
+                        this.setState({ beadCharity: 'charity__bead' });
+                        break;
+                    case 'MB':
+                        this.setState({ beadMystery: 'mystery__bead' });
+                        break;
+                    default:
+                        let newBeadDecade = this.state.beadDecade;
+                        newBeadDecade[this.state.syncDisplay[this.state.saveIndex].decade - 1].className = 'decade-bead__regular';
+                        this.setState({ beadDecade: newBeadDecade });
+                };
+            };
+            if (this.state.saveBead !== this.state.syncDisplay[index].bead_code) {
+                switch (this.state.syncDisplay[index].bead_code) {
+                    case 'OFH':
+                        this.setState({ beadOFFatimaHHQ: 'of-fatima-hhq__bead--highlight' });
+                        break;
+                    case 'HMF':
+                        this.setState({ beadFaith: 'faith__bead--highlight' });
+                        break;
+                    case 'HMH':
+                        this.setState({ beadHope: 'hope__bead--highlight' });
+                        break;
+                    case 'HMC':
+                        this.setState({ beadCharity: 'charity__bead--highlight' });
+                        break;
+                    case 'MB':
+                        this.setState({ beadMystery: 'mystery__bead--highlight' });
+                        break;
+                    default:
+                        let newBeadDecade = this.state.beadDecade;
+                        newBeadDecade[this.state.syncDisplay[index].decade - 1].className = 'decade-bead__regular--highlight';
+                        this.setState({ beadDecade: newBeadDecade });
+                };
+            };
+            if (this.state.syncDisplay[index].bead_code !== this.state.saveBead) {
+                this.setState({ saveBead: this.state.syncDisplay[index].bead_code });
+            };
+        };
+    };
 
     load = url => {
         this.setState({
@@ -304,7 +463,7 @@ class Rosary extends Component {
                     <div className="rosary__main-left">
                         <div className="pad"></div>
                         <div className="mystery">
-                            <div className="mystery__bead"
+                            <div className={this.state.beadMystery}
                                 id="mystery-bead"></div>
                         </div>
                         <div className="charity-mystery">
@@ -312,7 +471,7 @@ class Rosary extends Component {
                         </div>
                         <div className="charity">
                             <div
-                                className="charity__bead"
+                                className={this.state.beadCharity}
                                 id="charity-bead"></div>
                         </div>
                         <div className="hope-charity">
@@ -320,7 +479,7 @@ class Rosary extends Component {
                         </div>
                         <div className="hope">
                             <div
-                                className="hope__bead"
+                                className={this.state.beadHope}
                                 id="hope-bead"></div>
                         </div>
                         <div className="faith-hope">
@@ -328,7 +487,7 @@ class Rosary extends Component {
                         </div>
                         <div className="faith">
                             <div
-                                className="faith__bead"
+                                className={this.state.beadFaith}
                                 id="faith-bead"></div>
                         </div>
                         <div className="of-fatima-hhq-faith">
@@ -336,51 +495,58 @@ class Rosary extends Component {
                         </div>
                         <div className="of-fatima-hhq">
                             <div
-                                className="of-fatima-hhq__bead"
+                                className={this.state.beadOFFatimaHHQ}
                                 id="of-fatima-hhq-bead"></div>
                         </div>
                         <div className="crucifix">
                             <div
                                 className="crucifix__image"
                                 id="crucifix-image"
-                                style={{ zIndex: this.props.mysteryStatus ? -1 : 1 }}
+                                style={{ backgroundImage: this.state.crucifixImage, zIndex: this.props.mysteryStatus ? -1 : 1 }}
                             >
                             </div>
                         </div>
                     </div>
                     <div className="rosary__main-middle">
-                        <section className="background" id="prayer-background">
+                        <section
+                            className="background"
+                            id="prayer-background"
+                            style={{ backgroundImage: this.state.prayersBackgroundImage }}
+                        >
                             <div className="prayers">
                                 <div
                                     className="prayers__title"
                                     id="prayers-title"
-                                    style={{ marginTop: this.state.introMargin ? 2 + 'rem' : 0 }}
-                                >
-                                    {this.state.prayersTitleText}
-                                </div>
+                                    style={{ whiteSpace: 'pre-wrap', marginTop: this.state.introMargin ? 2 + 'rem' : 0 }}
+                                >{this.state.prayersTitleText}</div>
                                 <div className="prayers__subtitle">
                                     <div
                                         className="prayers__subtitle-1"
                                         id="prayers-subtitle-1"
-                                    ></div>
+                                        style={{ whiteSpace: 'pre-wrap' }}
+                                    >{this.state.prayersSubtitle1}</div>
                                     <div className="prayers__subtitle-2">
                                         <div
                                             className="prayers__subtitle-2-1"
                                             id="prayers-subtitle-2-1"
-                                        ></div>
+                                        >{this.state.prayersSubtitle2_1}</div>
                                         <div
                                             className="prayers__subtitle-2-2"
                                             id="prayers-subtitle-2-2"
-                                        ></div>
+                                        >{this.state.prayersSubtitle2_2}</div>
                                     </div>
                                 </div>
                                 <div className="prayers__subtitle-mystery">
                                     <div
                                         className="prayers__subtitle-mystery-1"
-                                        id="prayers-subtitle-mystery-1"></div>
+                                        id="prayers-subtitle-mystery-1">
+                                        {this.state.prayersSubtitleMystery1}
+                                    </div>
                                     <div
                                         className="prayers__subtitle-mystery-2"
-                                        id="prayers-subtitle-mystery-2"></div>
+                                        id="prayers-subtitle-mystery-2">
+                                        {this.state.prayersSubtitleMystery2}
+                                    </div>
                                 </div>
                                 <div
                                     className="prayers__text"
@@ -394,61 +560,61 @@ class Rosary extends Component {
                     <div className="rosary__main-right">
                         <div className="pad"></div>
                         <div className="decade-bead">
-                            <div className="decade-bead__regular" id="decade-bead-10"></div>
+                            <div className={this.state.beadDecade[9].className} id="decade-bead-10"></div>
                         </div>
                         <div className="decade-link">
                             <div className="decade-link__regular" id="decade-link-9"></div>
                         </div>
                         <div className="decade-bead">
-                            <div className="decade-bead__regular" id="decade-bead-9"></div>
+                            <div className={this.state.beadDecade[8].className} id="decade-bead-9"></div>
                         </div>
                         <div className="decade-link">
                             <div className="decade-link__regular" id="decade-link-8"></div>
                         </div>
                         <div className="decade-bead">
-                            <div className="decade-bead__regular" id="decade-bead-8"></div>
+                            <div className={this.state.beadDecade[7].className} id="decade-bead-8"></div>
                         </div>
                         <div className="decade-link">
                             <div className="decade-link__regular" id="decade-link-7"></div>
                         </div>
                         <div className="decade-bead">
-                            <div className="decade-bead__regular" id="decade-bead-7"></div>
+                            <div className={this.state.beadDecade[6].className} id="decade-bead-7"></div>
                         </div>
                         <div className="decade-link">
                             <div className="decade-link__regular" id="decade-link-6"></div>
                         </div>
                         <div className="decade-bead">
-                            <div className="decade-bead__regular" id="decade-bead-6"></div>
+                            <div className={this.state.beadDecade[5].className} id="decade-bead-6"></div>
                         </div>
                         <div className="decade-link">
                             <div className="decade-link__regular" id="decade-link-5"></div>
                         </div>
                         <div className="decade-bead">
-                            <div className="decade-bead__regular" id="decade-bead-5"></div>
+                            <div className={this.state.beadDecade[4].className} id="decade-bead-5"></div>
                         </div>
                         <div className="decade-link">
                             <div className="decade-link__regular" id="decade-link-4"></div>
                         </div>
                         <div className="decade-bead">
-                            <div className="decade-bead__regular" id="decade-bead-4"></div>
+                            <div className={this.state.beadDecade[3].className} id="decade-bead-4"></div>
                         </div>
                         <div className="decade-link">
                             <div className="decade-link__regular" id="decade-link-3"></div>
                         </div>
                         <div className="decade-bead">
-                            <div className="decade-bead__regular" id="decade-bead-3"></div>
+                            <div className={this.state.beadDecade[2].className} id="decade-bead-3"></div>
                         </div>
                         <div className="decade-link">
                             <div className="decade-link__regular" id="decade-link-2"></div>
                         </div>
                         <div className="decade-bead">
-                            <div className="decade-bead__regular" id="decade-bead-2"></div>
+                            <div className={this.state.beadDecade[1].className} id="decade-bead-2"></div>
                         </div>
                         <div className="decade-link">
                             <div className="decade-link__regular" id="decade-link-1"></div>
                         </div>
                         <div className="decade-bead">
-                            <div className="decade-bead__regular" id="decade-bead-1"></div>
+                            <div className={this.state.beadDecade[0].className} id="decade-bead-1"></div>
                         </div>
                     </div>
                 </div>
