@@ -4,6 +4,8 @@
   "description": "irosary",
   "main": "server.js",
   "scripts": {
+    "heroku-postbuild": "cd client && npm install --only=dev --no-shrinkwrap && npm run build",
+    "start": "node server.js",
     "client-install": "npm install --prefix client",
     "server-prod": "cross-env NODE_ENV=production node server",
     "server-dev": "cross-env NODE_ENV=development nodemon server",

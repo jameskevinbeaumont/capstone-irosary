@@ -57,7 +57,7 @@ class Rosary extends Component {
         newMysterySelected: false,
         mysteryDetail: [],
         vttLoaded: false, url: null,
-        playing: false, volume: 0.6, played: 0,
+        playing: false, volume: 0.2, played: 0,
         duration: 0, paused: 0, seek: false,
         playbackRate: 1.0, playedDisp: '', durationDisp: '',
         syncData: [],
@@ -130,9 +130,6 @@ class Rosary extends Component {
             };
         };
 
-        // console.log('this.state.vttLoaded => ', this.state.vttLoaded);
-        // console.log('this.props.currentMystery[0].code => ', this.props.currentMystery[0].code);
-
         if (this.state.vttLoaded || !this.props.currentMystery[0].code) return;
         // Axios call to get the mystery details based on
         // the current mystery
@@ -176,11 +173,8 @@ class Rosary extends Component {
     };
 
     getWeekDay = (date) => {
-        //Create an array containing each day, starting with Sunday.
         let weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        //Use the getDay() method to get the day.
         let day = date.getDay();
-        //Return the element that corresponds to that index.
         return weekdays[day];
     }
 
